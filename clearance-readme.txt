@@ -1,0 +1,34 @@
+Next steps:
+
+1. Configure the mailer to create full URLs in emails:
+
+    # config/environments/{development,test}.rb
+    config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
+    In the production environment it should be your application's full hostname.
+
+2. Display user session status.
+
+    From somewhere in your layout, render sign in and sign out buttons:
+
+    <% if signed_in? %>
+      Signed in as: <%= current_user.email %>
+      <%= button_to 'Sign out', sign_out_path, method: :delete %>
+    <% else %>
+      <%= link_to 'Sign in', sign_in_path %>
+    <% end %>
+
+3. Render the flash contents.
+
+    Make sure the flash is being rendered in your views using something like:
+
+    <div id="flash">
+      <% flash.each do |key, value| %>
+        <div class="flash <%= key %>"><%= value %></div>
+      <% end %>
+    </div>
+
+4. Migrate:
+
+    Run `rails db:migrate` to add the clearance database changes.
+
