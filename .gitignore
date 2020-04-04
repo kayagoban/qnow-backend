@@ -37,4 +37,3 @@ yarn-debug.log*
 Gemfile.lock
 .browserslistrc
 *.swp
-schema.rb

@@ -1,4 +1,4 @@
 class QueueSlot < ApplicationRecord
-  belongs_to :users
-  belongs_to :merchants
+  belongs_to :user
+  belongs_to :merchant
 end
