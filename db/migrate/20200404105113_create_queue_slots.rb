@@ -3,7 +3,7 @@ class CreateQueueSlots < ActiveRecord::Migration[6.0]
     create_table :queue_slots do |t|
       t.references :user, null: false, foreign_key: true, index: true
       t.references :merchant, null: false, foreign_key: true, index: false
-      #t.timestamps
+      t.timestamps
     end
   end
 end

@@ -1,5 +1,23 @@
 class User < ApplicationRecord
   include Clearance::User
 
-  has_many :queue_slots, dependent: :destroy
+  has_many :queue_slots, 
+    dependent: :destroy
+
+  def queues
+
+    # for each queue slot for the user,
+    # check the merchant.
+    # get merchant name, total queued 
+    # slots for merchant, and 
+    # current slot number of the user.
+
+    #queue_slots.map do |slot|
+    #  slot.merchant.queue_slots 
+    
+    #User.connection.execute('SELECT *, ROW_NUMBER() over (order by id) as rownum from queue_slots where merchant_id = 1')
+
+  end
+
+
 end

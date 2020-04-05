@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 2020_04_04_105113) do
   create_table "queue_slots", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "merchant_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_queue_slots_on_user_id"
   end
 
