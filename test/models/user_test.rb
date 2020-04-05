@@ -3,13 +3,6 @@ require 'pry'
 
 class UserTest < ActiveSupport::TestCase
 
-  begin
-    Merchant.connection  
-  rescue 
-    nil
-  end
-
-
   test "user validates inputs" do
     user = User.create(email: "cthomas@railjumper.com", password: "asdf")
     assert user.valid?
@@ -49,9 +42,6 @@ class UserTest < ActiveSupport::TestCase
 
     assert false
   end
-
-
-
 
  
 end

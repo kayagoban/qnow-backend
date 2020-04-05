@@ -5,6 +5,7 @@ class User < ApplicationRecord
     dependent: :destroy
 
   def queues
+    return queue_slots
 
     # for each queue slot for the user,
     # check the merchant.

@@ -1,11 +1,6 @@
 require 'test_helper'
 
 class MerchantTest < ActiveSupport::TestCase
-  begin
-    Merchant.connection  
-  rescue 
-    nil
-  end
 
   test "can admit a user" do
     merchant = Merchant.create(
@@ -27,12 +22,11 @@ class MerchantTest < ActiveSupport::TestCase
       )
     end
 
+    r = merchant.admit(0)
     binding.pry
-    merchant.admit(0)
 
 
   end
-
 
 
 end

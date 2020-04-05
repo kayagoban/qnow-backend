@@ -4,13 +4,19 @@ class Merchant < ApplicationRecord
   has_many :queue_slots, 
     dependent: :destroy
 
-  has_many :users, 
-    through: queue_slots, 
-    order_by: queue_id, 
-    dependent: :destroy
-
   def admit(index=0)
-    sql = '''
+    sql = admit_sql + index.to_s
+
+    #Self.connection.exec_query(sql + index)
+    #class.connection.execute(sql + index)
+  end
+
+  def boot(index=0, boot_length=10)
+    
+  end
+
+  def admit_sql
+'''
 SELECT * FROM (
   SELECT
     ROW_NUMBER() OVER (ORDER BY key ASC) AS rownumber,
@@ -18,14 +24,7 @@ SELECT * FROM (
   FROM queue_slots
 ) AS foo
 WHERE rownumber <= 
-    '''
-
-    #Self.connection.exec_query(sql + index)
-    Self.connection.execute(sql + index)
-  end
-
-  def boot(index=0, boot_length=10)
-    
+''' 
   end
 
 end
