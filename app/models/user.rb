@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :queue_slots, 
     dependent: :destroy
 
+
   def queues
     return queue_slots
 
@@ -20,5 +21,8 @@ class User < ApplicationRecord
 
   end
 
+  def join(merchant_id)
+    QueueSlot.create(user: self, merchant_id: merchant_id)
+  end
 
 end

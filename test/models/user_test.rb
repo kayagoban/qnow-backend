@@ -14,13 +14,27 @@ class UserTest < ActiveSupport::TestCase
     assert !user.valid?
   end
 
-  test "can join a queue" do
+  test "can join queue" do
+    user = User.create(email: "cthomas@railjumper.com", password: "asdf")
+    merchant = Merchant.create(email: "k@konzum.hr", password: "asdf")
+
+    q = user.join(merchant.id)
+
+    assert q.valid?
+  end
+
+  test "can't have multiple queueslots per merchant" do
     user = User.create(email: "cthomas@railjumper.com", password: "asdf")
     merchant = Merchant.create(email: "k@konzum.hr", password: "asdf")
 
     q = QueueSlot.create(user: user, merchant: merchant)
 
     assert q.valid?
+
+    r = QueueSlot.create(user: user, merchant: merchant)
+
+    assert_not r.valid?
+
   end
 
   test "deletes queue when user is deleted" do

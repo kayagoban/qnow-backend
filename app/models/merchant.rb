@@ -19,13 +19,20 @@ class Merchant < ApplicationRecord
 
     rows = get_rows(position, destination)
 
-    target_user_id = rows.first['user_id']
+    row_ids = rows.map do |row|
+      row['id']
+    end
 
+    shifted = row_ids.shift
+    row_ids.push(shifted)
+
+    # in a transaction because we may temporarily be in
+    # a state where users have more than one slot per merchant
+    #
     ActiveRecord::Base.transaction do
-      rows.reverse.each do |row|
-        moved_user_id = row['user_id']
-        QueueSlot.where(id: row['id']).update(user_id: target_user_id)
-        target_user_id = moved_user_id
+      rows.each_with_index do |row, index|
+        # update_attribute skips the uniqueness validation
+        QueueSlot.find(row['id']).update_attribute('user_id', row_ids[index])
       end
     end
 
