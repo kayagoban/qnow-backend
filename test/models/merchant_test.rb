@@ -4,16 +4,13 @@ class MerchantTest < ActiveSupport::TestCase
 
   test "can get a row" do
     merchant = Merchant.create(
-      email: Faker::Internet.email, 
       name: Faker::Name.name, 
-      password: SecureRandom.alphanumeric
+      session_id: SecureRandom.alphanumeric
     )
 
     (1..10).each do
       user = User.create(
-        email: Faker::Internet.email, 
-        name: Faker::Name.name, 
-        password: SecureRandom.alphanumeric
+        session_id: SecureRandom.alphanumeric
       )
 
       q = QueueSlot.create(
@@ -27,16 +24,13 @@ class MerchantTest < ActiveSupport::TestCase
 
   test "can get rows" do
     merchant = Merchant.create(
-      email: Faker::Internet.email, 
       name: Faker::Name.name, 
-      password: SecureRandom.alphanumeric
+      session_id: SecureRandom.alphanumeric
     )
 
     (1..10).each do
       user = User.create(
-        email: Faker::Internet.email, 
-        name: Faker::Name.name, 
-        password: SecureRandom.alphanumeric
+        session_id: SecureRandom.alphanumeric
       )
 
       q = QueueSlot.create(
@@ -55,16 +49,13 @@ class MerchantTest < ActiveSupport::TestCase
 
   test "can admit a user" do
     merchant = Merchant.create(
-      email: Faker::Internet.email, 
       name: Faker::Name.name, 
-      password: SecureRandom.alphanumeric
+      session_id: SecureRandom.alphanumeric
     )
 
     (1..20).each do
       user = User.create(
-        email: Faker::Internet.email, 
-        name: Faker::Name.name, 
-        password: SecureRandom.alphanumeric
+        session_id: SecureRandom.alphanumeric
       )
 
       q = QueueSlot.create(
@@ -81,16 +72,13 @@ class MerchantTest < ActiveSupport::TestCase
 
   test 'can boot a user back through the line' do
     merchant = Merchant.create(
-      email: Faker::Internet.email, 
       name: Faker::Name.name, 
-      password: SecureRandom.alphanumeric
+      session_id: SecureRandom.alphanumeric
     )
 
     (1..20).each do
       user = User.create(
-        email: Faker::Internet.email, 
-        name: Faker::Name.name, 
-        password: SecureRandom.alphanumeric
+        session_id: SecureRandom.alphanumeric
       )
 
       q = QueueSlot.create(

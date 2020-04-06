@@ -12,17 +12,13 @@ class QueueSlotTest < ActiveSupport::TestCase
 
   test "can add a bunch of users" do
     merchant = Merchant.create(
-      email: Faker::Internet.email, 
       name: Faker::Name.name, 
-      password: SecureRandom.alphanumeric
+      session_id: SecureRandom.alphanumeric
     )
-
 
     (1..20).each do
       user = User.create(
-        email: Faker::Internet.email, 
-        name: Faker::Name.name, 
-        password: SecureRandom.alphanumeric
+        session_id: SecureRandom.alphanumeric
       )
       q = QueueSlot.create(
         merchant: merchant, 

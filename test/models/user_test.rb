@@ -3,20 +3,25 @@ require 'pry'
 
 class UserTest < ActiveSupport::TestCase
 
-  test "user validates inputs" do
-    user = User.create(email: "cthomas@railjumper.com", password: "asdf")
+  test "can create user" do
+    user = User.create(
+      session_id: SecureRandom.alphanumeric
+    )
+
     assert user.valid?
   end
 
-  test "can create user" do
-    #binding.pry
-    user = User.create(email: "zzzzz", password: "asdf")
-    assert !user.valid?
-  end
-
   test "can join queue" do
-    user = User.create(email: "cthomas@railjumper.com", password: "asdf")
-    merchant = Merchant.create(email: "k@konzum.hr", password: "asdf")
+    user = User.create(
+      session_id: SecureRandom.alphanumeric
+    )
+
+    merchant = Merchant.create(
+      name: Faker::Name.name, 
+      session_id: SecureRandom.alphanumeric
+    )
+
+
 
     q = user.join(merchant.id)
 
@@ -24,8 +29,16 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "can't have multiple queueslots per merchant" do
-    user = User.create(email: "cthomas@railjumper.com", password: "asdf")
-    merchant = Merchant.create(email: "k@konzum.hr", password: "asdf")
+    user = User.create(
+      session_id: SecureRandom.alphanumeric
+    )
+
+    merchant = Merchant.create(
+      name: Faker::Name.name, 
+      session_id: SecureRandom.alphanumeric
+    )
+
+
 
     q = QueueSlot.create(user: user, merchant: merchant)
 
@@ -38,8 +51,16 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "deletes queue when user is deleted" do
-    user = User.create(email: "cthomas@railjumper.com", password: "asdf")
-    merchant = Merchant.create(email: "k@konzum.hr", password: "asdf")
+    user = User.create(
+      session_id: SecureRandom.alphanumeric
+    )
+
+    merchant = Merchant.create(
+      name: Faker::Name.name, 
+      session_id: SecureRandom.alphanumeric
+    )
+
+
 
     q = QueueSlot.create(user: user, merchant: merchant)
 
@@ -57,5 +78,5 @@ class UserTest < ActiveSupport::TestCase
     assert false
   end
 
- 
+
 end

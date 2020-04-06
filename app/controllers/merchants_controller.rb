@@ -1,5 +1,4 @@
 class MerchantsController < ApplicationController
-  require 'pry'
 
   def create
     binding.pry
