@@ -1,23 +1,27 @@
 require 'test_helper'
 
 class MerchantsControllerTest < ActionDispatch::IntegrationTest
-  test 'get merchant slots' do
-    get '/merchants/1/slots'#, params: { id: 1 }
-    #, action: 'slots'
+  test 'create merchant' do
+    post '/merchants'
     assert_response :success
+  end
+  #test 'get merchant slots' do
+  #  get '/merchants/1/slots'#, params: { id: 1 }
+    #, action: 'slots'
+  #  assert_response :success
     #assert_template :index
     #assert_not_nil assigns(:news)
-  end
+  #end
 
-  test 'enqueue to merchant' do
-    post '/merchants/1/enqueue'
-    #, params: { id: 1 }
-    #, action: 'slots'
-    assert_response :success
-    #assert_template :index
-    #assert_not_nil assigns(:news)
-  end
- 
+  #test 'enqueue to merchant' do
+  #  post '/merchants/1/enqueue'
+  #  #, params: { id: 1 }
+  #  #, action: 'slots'
+  #  assert_response :success
+  ##  #assert_template :index
+  #  #assert_not_nil assigns(:news)
+#  end
+# 
 
   # test "the truth" do
   #   assert true

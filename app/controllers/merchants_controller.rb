@@ -1,7 +1,15 @@
 class MerchantsController < ApplicationController
 
   def create
-    binding.pry
+    merchant = Merchant.create
+    session[:current_user_id] = merchant.id
+    merchant.session_id = session.id
+    render status: 200
+  end
+
+  def new
+    # render new page with
+    # name and queue length
   end
 
   def index
