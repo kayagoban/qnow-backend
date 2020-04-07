@@ -3,21 +3,28 @@ class User < ApplicationRecord
 
   class BootException < Exception; end
 
-  has_many :joined_queue_slots, class_name:  'QueueSlot', foreign_key: :client_id, dependent: :destroy, inverse_of: :client
-  has_many :owned_queue_slots, class_name:  'QueueSlot', foreign_key: :merchant_id, dependent: :destroy, inverse_of: :merchant
-
+  # not very useful directly
   has_many :known_merchant_users, foreign_key: :client_id, dependent: :destroy
 
   has_many :known_merchants, through: :known_merchant_users, source: :merchant#, class_name: 'User'
 
-  #client-role relationships
+  has_many :owned_queue_slots, class_name:  'QueueSlot', foreign_key: :merchant_id, dependent: :destroy, inverse_of: :merchant
 
+  has_many :joined_queue_slots, class_name:  'QueueSlot', foreign_key: :client_id, dependent: :destroy, inverse_of: :client
+
+
+ 
+  #client-role relationships
+  
+  # merchants through queue slots
   def merchants
     User.joins('INNER JOIN "queue_slots" ON "queue_slots"."merchant_id" = "users"."id" where "queue_slots"."client_id" = ' + id.to_s)
   end
 
+
   # merchant-role relationships
   
+  # clients through queue slots
   def clients
     User.joins('INNER JOIN "queue_slots" ON "queue_slots"."client_id" = "users"."id" where "queue_slots"."merchant_id" = ' + id.to_s)
   end
