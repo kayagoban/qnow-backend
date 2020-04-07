@@ -90,7 +90,7 @@ class UserTest < ActiveSupport::TestCase
       )
     end
 
-    assert merchant.queue_slots.last.id == merchant.get_row(10).first['id'] 
+    assert merchant.owned_queue_slots.last.id == merchant.get_row(10).first['id'] 
   end
 
   test "can get queueslots" do
@@ -167,12 +167,14 @@ class UserTest < ActiveSupport::TestCase
     end
 
     # boot 3 to 8 and move everyone else up one.
+    #binding.pry
     merchant.boot(3, 8)
     rows = merchant.get_rows(3, 8)
-    assert rows.first['user_id'] == 4
-    assert rows.last['user_id'] == 3
+    #binding.pry
+    assert rows.first['client_id'] == 6
+    assert rows.last['client_id'] == 5
     rows.delete(rows.last)
-    assert rows.last['user_id'] == 8
+    assert rows.last['client_id'] == 10
   end
 
 

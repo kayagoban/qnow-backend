@@ -30,7 +30,7 @@ class User < ApplicationRecord
     rows = get_rows(position, destination)
 
     row_ids = rows.map do |row|
-      row['id']
+      row['client_id']
     end
 
     shifted = row_ids.shift
@@ -42,7 +42,7 @@ class User < ApplicationRecord
     ActiveRecord::Base.transaction do
       rows.each_with_index do |row, index|
         # update_attribute skips the uniqueness validation
-        QueueSlot.find(row['id']).update_attribute('user_id', row_ids[index])
+        QueueSlot.find(row['id']).update_attribute('client_id', row_ids[index])
       end
     end
 
@@ -66,6 +66,7 @@ class User < ApplicationRecord
 SELECT * FROM (
   SELECT
     id,
+    merchant_id,
     client_id,
     ROW_NUMBER() OVER (ORDER BY id ASC) AS rownumber
   FROM queue_slots
