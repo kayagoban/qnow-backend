@@ -1,9 +1,9 @@
-class MerchantsController < ApplicationController
+class UsersController < ApplicationController
 
   def create
-    merchant = Merchant.create
-    session[:current_user_id] = merchant.id
-    merchant.session_id = session.id
+    user = User.create
+    session[:current_user_id] = user.id
+    user.session_id = session.id
     render status: 200
   end
 

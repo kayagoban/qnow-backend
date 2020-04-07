@@ -10,8 +10,10 @@ class QueueSlotTest < ActiveSupport::TestCase
 #    nil
 #  end
 
+=begin
   test "can add a bunch of users" do
-    merchant = Merchant.create(
+
+    merchant = User.create(
       name: Faker::Name.name, 
       session_id: SecureRandom.alphanumeric
     )
@@ -29,6 +31,6 @@ class QueueSlotTest < ActiveSupport::TestCase
 
     assert merchant.queue_slots.count == 20
   end
-
+=end
 
 end

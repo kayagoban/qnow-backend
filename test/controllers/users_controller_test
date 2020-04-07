@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class MerchantsControllerTest < ActionDispatch::IntegrationTest
+class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'create merchant' do
-    post '/merchants'
+    post '/users'
     assert_response :success
   end
   #test 'get merchant slots' do

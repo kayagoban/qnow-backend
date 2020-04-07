@@ -3,13 +3,10 @@ class User < ApplicationRecord
 
   class BootException < Exception; end
 
-  #has_many :queue_slots, foreign_key: 'merchant_id', dependent: :destroy, class_name: 'User'
-  
-  #client-role relationships
+  has_many :joined_queue_slots, class_name:  'QueueSlot', foreign_key: :client_id, dependent: :destroy, inverse_of: :client
+  has_many :owned_queue_slots, class_name:  'QueueSlot', foreign_key: :merchant_id, dependent: :destroy, inverse_of: :merchant
 
-  def joined_queue_slots
-    QueueSlot.where(client: self)
-  end
+  #client-role relationships
 
   def merchants
     User.joins('INNER JOIN "queue_slots" ON "queue_slots"."merchant_id" = "users"."id" where "queue_slots"."client_id" = ' + id.to_s)
@@ -21,22 +18,8 @@ class User < ApplicationRecord
     User.joins('INNER JOIN "queue_slots" ON "queue_slots"."client_id" = "users"."id" where "queue_slots"."merchant_id" = ' + id.to_s)
   end
 
-  def owned_queue_slots
-    QueueSlot.where(merchant: self)
-  end
-
-  has_and_belongs_to_many(:queue_slots,
-    :join_table => "queue_slots",
-    :foreign_key => "merchant_id",
-    :association_foreign_key => "client_id")
-
-  #def queue_slots
-  #  User.connection.execute('''
-  #LECT "queue_slots".* FROM "queue_slots" WHERE "queue_slots"."merchant_id" = ?''', [id])
-  #end
-
   def admit
-    queue_slots.first.destroy
+    owned_queue_slots.first.destroy
   end
 
   def boot(position, destination)
@@ -83,7 +66,7 @@ class User < ApplicationRecord
 SELECT * FROM (
   SELECT
     id,
-    user_id,
+    client_id,
     ROW_NUMBER() OVER (ORDER BY id ASC) AS rownumber
   FROM queue_slots
 ) AS foo
@@ -102,8 +85,6 @@ SELECT * FROM (
 WHERE rownumber = 
 ''' 
   end
-
-
 
   def queues
     return queue_slots
