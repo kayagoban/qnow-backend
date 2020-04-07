@@ -6,6 +6,10 @@ class User < ApplicationRecord
   has_many :joined_queue_slots, class_name:  'QueueSlot', foreign_key: :client_id, dependent: :destroy, inverse_of: :client
   has_many :owned_queue_slots, class_name:  'QueueSlot', foreign_key: :merchant_id, dependent: :destroy, inverse_of: :merchant
 
+  has_many :known_merchant_users, foreign_key: :client_id, dependent: :destroy
+
+  has_many :known_merchants, through: :known_merchant_users, source: :merchant#, class_name: 'User'
+
   #client-role relationships
 
   def merchants

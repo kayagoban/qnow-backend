@@ -177,5 +177,34 @@ class UserTest < ActiveSupport::TestCase
     assert rows.last['client_id'] == 10
   end
 
+  test 'overbooting places a user in the last row' do
+    merchant = User.create(
+      name: Faker::Name.name, 
+      session_id: SecureRandom.alphanumeric
+    )
+
+    (1..5).each do
+      user = User.create(
+        session_id: SecureRandom.alphanumeric
+      )
+
+      q = QueueSlot.create(
+        merchant: merchant, 
+        client: user
+      )
+    end
+
+    # boot 3 to 8 and move everyone else up one.
+    #binding.pry
+    merchant.boot(3, 8)
+    rows = merchant.get_rows(3, 8)
+    #binding.pry
+    assert rows.first['client_id'] == 6
+    assert rows.last['client_id'] == 5
+    rows.delete(rows.last)
+    assert rows.last['client_id'] == 7 
+  end
+
+
 
 end

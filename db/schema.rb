@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_04_105113) do
+ActiveRecord::Schema.define(version: 2020_04_07_154313) do
+
+  create_table "known_merchant_users", id: false, force: :cascade do |t|
+    t.integer "client_id", null: false
+    t.integer "merchant_id", null: false
+    t.index ["client_id"], name: "index_known_merchant_users_on_client_id"
+  end
 
   create_table "queue_slots", force: :cascade do |t|
     t.integer "merchant_id", null: false
