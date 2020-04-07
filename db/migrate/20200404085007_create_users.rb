@@ -3,14 +3,9 @@ class CreateUsers < ActiveRecord::Migration[6.0]
     create_table :users do |t|
       t.timestamps null: false
       t.string :session_id, limit: 32
-    end
-
-    create_table :merchants do |t|
-      t.timestamps null: false
-      t.string :session_id, limit: 32
       t.string :name
       t.integer :qlength
+ 
     end
-
   end
 end

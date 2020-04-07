@@ -12,7 +12,16 @@
 
 ActiveRecord::Schema.define(version: 2020_04_04_105113) do
 
-  create_table "merchants", force: :cascade do |t|
+  create_table "queue_slots", force: :cascade do |t|
+    t.integer "merchant_id", null: false
+    t.integer "client_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_queue_slots_on_client_id"
+    t.index ["merchant_id"], name: "index_queue_slots_on_merchant_id"
+  end
+
+  create_table "users", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "session_id", limit: 32
@@ -20,20 +29,4 @@ ActiveRecord::Schema.define(version: 2020_04_04_105113) do
     t.integer "qlength"
   end
 
-  create_table "queue_slots", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "merchant_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_queue_slots_on_user_id"
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "session_id", limit: 32
-  end
-
-  add_foreign_key "queue_slots", "merchants"
-  add_foreign_key "queue_slots", "users"
 end
