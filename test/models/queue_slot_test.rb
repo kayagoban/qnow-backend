@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'faker'
-require 'pry'
 
 class QueueSlotTest < ActiveSupport::TestCase
   test 'when queue_slot is created, a known_merchant_user is created' do

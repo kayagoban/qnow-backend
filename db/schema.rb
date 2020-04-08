@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_154313) do
   create_table "queue_slots", force: :cascade do |t|
     t.integer "merchant_id", null: false
     t.integer "client_id", null: false
+    t.boolean "booted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["client_id"], name: "index_queue_slots_on_client_id"
@@ -33,6 +34,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_154313) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "session_id", limit: 32
     t.string "name"
+    t.string "transfer_code", limit: 16
     t.integer "qlength"
   end
 

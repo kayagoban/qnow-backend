@@ -1,7 +1,8 @@
 class User < ApplicationRecord
-  #include Clearance::User
 
   class BootException < Exception; end
+
+  after_initialize :set_transfer_code
 
   # merchant role associations
   has_many :known_client_joins, class_name: 'KnownMerchantUser', foreign_key: :merchant_id, dependent: :destroy, inverse_of: :merchant
@@ -24,7 +25,25 @@ class User < ApplicationRecord
   # current merchants who we have a queueslot for
   has_many :merchants, through: :joined_queue_slots, source: :merchant
 
+
+  def set_transfer_code
+    transfer_code = SecureRandom.alphanumeric
+  end
+
  
+  #################################################
+  # Client role methods
+
+  def enqueue_for_merchant(merchant_id)
+    QueueSlot.create(user: self, merchant_id: merchant_id)
+  end
+
+
+
+
+
+  #################################################
+  # Merchant role methods
 
   def admit
     owned_queue_slots.first.destroy
@@ -52,24 +71,30 @@ class User < ApplicationRecord
         # update_attribute skips the uniqueness validation
         QueueSlot.find(row['id']).update_attribute('client_id', row_ids[index])
       end
+
+      q = QueueSlot.find(rows.last['id'])
+      q.booted = true
+      q.save
     end
 
   end
 
+
+  # methods to get numbered rows for merchant
   def get_row(position)
-    sql = find_row_sql + position.to_s
+    sql = find_row_sql(self.id, position)
     ActiveRecord::Base.connection.execute(sql)
   end
 
-  def get_rows(position, destination)
+  def get_rows(start_position, end_position)
     ActiveRecord::Base.connection.execute(
       find_rows_sql(
-        position, destination
+        self.id, start_position, end_position 
       )
     )
   end
 
-  def find_rows_sql(from, to)
+  def find_rows_sql(merchant_id, from, to)
 '
 SELECT * FROM (
   SELECT
@@ -77,42 +102,23 @@ SELECT * FROM (
     merchant_id,
     client_id,
     ROW_NUMBER() OVER (ORDER BY id ASC) AS rownumber
-  FROM queue_slots
+  FROM queue_slots WHERE merchant_id = ' + merchant_id.to_s + '
 ) AS foo
 WHERE rownumber >= ' + from.to_s + ' AND rownumber <= ' + to.to_s
  
   end
 
-  def find_row_sql
-'''
+  def find_row_sql(merchant_id, position)
+'
 SELECT * FROM (
   SELECT
     *,
     ROW_NUMBER() OVER (ORDER BY id ASC) AS rownumber
-  FROM queue_slots
+  FROM queue_slots WHERE merchant_id = ' + merchant_id.to_s + '
 ) AS foo
 WHERE rownumber = 
-''' 
+    ' + position.to_s
   end
 
-  def queues
-    return queue_slots
-
-    # for each queue slot for the user,
-    # check the merchant.
-    # get merchant name, total queued 
-    # slots for merchant, and 
-    # current slot number of the user.
-
-    #queue_slots.map do |slot|
-    #  slot.merchant.queue_slots 
-    
-    #User.connection.execute('SELECT *, ROW_NUMBER() over (order by id) as rownum from queue_slots where merchant_id = 1')
-
-  end
-
-  def join(merchant_id)
-    QueueSlot.create(user: self, merchant_id: merchant_id)
-  end
 
 end

@@ -145,6 +145,11 @@ class UserTest < ActiveSupport::TestCase
       session_id: SecureRandom.alphanumeric
     )
 
+    # unrelated QueueSlots
+    (1..5).each do
+      QueueSlot.create(merchant: User.create, client: User.create)
+    end
+
     (1..20).each do
       user = User.create(
         session_id: SecureRandom.alphanumeric
@@ -167,10 +172,10 @@ class UserTest < ActiveSupport::TestCase
     # boot 3 to 8 and move everyone else up one.
     merchant.boot(3, 8)
     rows = merchant.get_rows(3, 8)
-    assert rows.first['client_id'] == 5
-    assert rows.last['client_id'] == 4
+    assert rows.first['client_id'] == 15
+    assert rows.last['client_id'] == 14
     rows.delete(rows.last)
-    assert rows.last['client_id'] == 9 
+    assert rows.last['client_id'] == 19 
   end
 
   test 'overbooting places a user in the last row' do
@@ -178,6 +183,13 @@ class UserTest < ActiveSupport::TestCase
       name: Faker::Name.name, 
       session_id: SecureRandom.alphanumeric
     )
+
+    # unrelated QueueSlots
+    (1..5).each do
+      QueueSlot.create(merchant: User.create, client: User.create)
+    end
+
+
 
     (1..5).each do
       user = User.create(
@@ -190,13 +202,20 @@ class UserTest < ActiveSupport::TestCase
       )
     end
 
+    # unrelated QueueSlots
+    (1..5).each do
+      QueueSlot.create(merchant: User.create, client: User.create)
+    end
+
+
     # boot 3 to 8 and move everyone else up one.
     merchant.boot(3, 8)
     rows = merchant.get_rows(3, 8)
-    assert rows.first['client_id'] == 5
-    assert rows.last['client_id'] == 4
+    assert rows.first['client_id'] == 15
+    assert rows.last['client_id'] == 14
+    assert QueueSlot.find(rows.last['id']).booted == true
     rows.delete(rows.last)
-    assert rows.last['client_id'] == 6 
+    assert rows.last['client_id'] == 16 
   end
 
   test 'when user is destroyed, all known_merchants should be destroyed' do

@@ -10,5 +10,7 @@ class QueueSlot < ApplicationRecord
   end
 
 
+
+
 end
 
