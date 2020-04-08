@@ -25,18 +25,6 @@ class User < ApplicationRecord
   has_many :merchants, through: :joined_queue_slots, source: :merchant
 
  
-  # merchants through queue slots
-  #def merchants
-  #  User.joins('INNER JOIN "queue_slots" ON "queue_slots"."merchant_id" = "users"."id" where "queue_slots"."client_id" = ' + id.to_s)
-  #end
-
-
-  # merchant-role relationships
-  
-  # clients through queue slots
-  #def clients
-  #  User.joins('INNER JOIN "queue_slots" ON "queue_slots"."client_id" = "users"."id" where "queue_slots"."merchant_id" = ' + id.to_s)
-  #end
 
   def admit
     owned_queue_slots.first.destroy

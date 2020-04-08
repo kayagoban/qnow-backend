@@ -3,34 +3,36 @@ require 'faker'
 require 'pry'
 
 class QueueSlotTest < ActiveSupport::TestCase
-
-#  begin
-#    ActiveRecord::Base.connection  
-#  rescue 
-#    nil
-#  end
-
-=begin
-  test "can add a bunch of users" do
-
-    merchant = User.create(
-      name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
-    )
-
-    (1..20).each do
-      user = User.create(
-        session_id: SecureRandom.alphanumeric
-      )
-      q = QueueSlot.create(
-        merchant: merchant, 
-        user: user
-      )
- 
-    end
-
-    assert merchant.queue_slots.count == 20
+  test 'when queue_slot is created, a known_merchant_user is created' do
+    assert KnownMerchantUser.all.count == 0
+    merchant = User.create
+    client = User.create
+    q = QueueSlot.create(merchant: merchant, client: client)
+    kmus = KnownMerchantUser.all
+    assert kmus.count == 1
+    assert kmus.first.merchant == merchant
+    assert kmus.first.client = client
   end
-=end
+
+  test 'when queue_slot is recreated, no additional known_merchant_user is created' do
+    assert KnownMerchantUser.all.count == 0
+    merchant = User.create
+    client = User.create
+    q = QueueSlot.create(merchant: merchant, client: client)
+    kmus = KnownMerchantUser.all
+    assert kmus.count == 1
+    assert kmus.first.merchant == merchant
+    assert kmus.first.client = client
+ 
+    q.destroy
+
+    q = QueueSlot.create(merchant: merchant, client: client)
+
+    kmus = KnownMerchantUser.all
+    assert kmus.count == 1
+    assert kmus.first.merchant == merchant
+    assert kmus.first.client = client
+  end
+
 
 end

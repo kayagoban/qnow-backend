@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'pry'
 
 class UserTest < ActiveSupport::TestCase
 
@@ -20,7 +19,6 @@ class UserTest < ActiveSupport::TestCase
       name: Faker::Name.name, 
       session_id: SecureRandom.alphanumeric
     )
-
 
     q = QueueSlot.create(merchant: merchant, client: user)
 
@@ -239,7 +237,6 @@ class UserTest < ActiveSupport::TestCase
     assert client.known_merchants.reload == [merchant2]
 
   end
-
 
 
 end
