@@ -221,6 +221,25 @@ class UserTest < ActiveSupport::TestCase
 
   end
 
+  test 'when merchant is destroyed, all known_merchants should be destroyed' do
+    merchant = User.create(
+      name: Faker::Name.name, 
+      session_id: SecureRandom.alphanumeric
+    )
+    merchant2 = User.create(
+      name: Faker::Name.name, 
+      session_id: SecureRandom.alphanumeric
+    )
+    client = User.create
+
+    client.known_merchants << [merchant, merchant2]
+    km = KnownMerchantUser.where(merchant: [merchant, merchant2])
+    assert km.length == 2
+    merchant.destroy
+    assert client.known_merchants.reload == [merchant2]
+
+  end
+
 
 
 end

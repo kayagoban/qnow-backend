@@ -3,10 +3,13 @@ class User < ApplicationRecord
 
   class BootException < Exception; end
 
-  # not very useful directly
-  has_many :known_merchant_users, foreign_key: :client_id, dependent: :destroy
+  has_many :known_client_joins, class_name: 'KnownMerchantUser', foreign_key: :merchant_id, dependent: :destroy, inverse_of: :merchant
 
-  has_many :known_merchants, through: :known_merchant_users, source: :merchant#, class_name: 'User'
+  has_many :known_clients, through: :known_client_joins, source: :client
+
+  has_many :known_merchant_joins, class_name: 'KnownMerchantUser', foreign_key: :client_id, dependent: :destroy, inverse_of: :client
+
+  has_many :known_merchants, through: :known_merchant_joins, source: :merchant
 
   has_many :owned_queue_slots, class_name:  'QueueSlot', foreign_key: :merchant_id, dependent: :destroy, inverse_of: :merchant
 
