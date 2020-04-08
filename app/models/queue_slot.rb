@@ -5,6 +5,10 @@ class QueueSlot < ApplicationRecord
 
   validates :client, uniqueness: { scope: :merchant }
 
+  after_create do
+    KnownMerchantUser.create(merchant: merchant, client: client)
+  end
+
 
 end
 
