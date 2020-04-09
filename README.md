@@ -1,24 +1,13 @@
-# README
+# Qnow
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Qnow is a human queue management product for smartphone clients.  It is free to use, copy and modify, under the MIT license.
 
-Things you may want to cover:
+Goals of this software.
 
-* Ruby version
+* Minimize physical human queues to help prevent crowding around services.
 
-* System dependencies
+* Minimum technical barrier to entry.
 
-* Configuration
+* Anonymity and absence of data collection.
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Ability to merge with (small) non-automated queues
