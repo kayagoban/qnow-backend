@@ -41,7 +41,6 @@ class User < ApplicationRecord
 
 
 
-
   #################################################
   # Merchant role methods
 

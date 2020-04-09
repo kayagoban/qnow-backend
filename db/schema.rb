@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_154313) do
+ActiveRecord::Schema.define(version: 2020_04_09_111539) do
 
   create_table "known_merchant_users", force: :cascade do |t|
     t.integer "client_id", null: false
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_154313) do
     t.string "name"
     t.string "transfer_code", limit: 16
     t.integer "qlength"
+    t.integer "queue_slots_count"
   end
 
 end
