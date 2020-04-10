@@ -5,8 +5,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.string :session_id, limit: 32
       t.string :name
       t.string :transfer_code, limit: 16
-      t.integer :qlength
- 
+      t.integer :qlength, default: 0
     end
   end
 end

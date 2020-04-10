@@ -35,8 +35,8 @@ ActiveRecord::Schema.define(version: 2020_04_09_111539) do
     t.string "session_id", limit: 32
     t.string "name"
     t.string "transfer_code", limit: 16
-    t.integer "qlength"
-    t.integer "queue_slots_count"
+    t.integer "qlength", default: 0
+    t.integer "queue_slots_count", default: 0
   end
 
 end
