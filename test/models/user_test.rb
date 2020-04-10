@@ -134,7 +134,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     merchant.admit
-    assert merchant.owned_queue_slots.reload.first.client_id == 3
+    assert merchant.owned_queue_slots.count == 9
 
   end
 
@@ -170,12 +170,15 @@ class UserTest < ActiveSupport::TestCase
     end
 
     # boot 3 to 8 and move everyone else up one.
+    rows = merchant.get_rows(3, 8)
+    booted_client_id = rows.first['client_id']
+    last_client_id = rows.last['client_id']
     merchant.boot(3, 8)
     rows = merchant.get_rows(3, 8)
-    assert rows.first['client_id'] == 15
-    assert rows.last['client_id'] == 14
+    assert rows.first['client_id'] == booted_client_id + 1
+    assert rows.last['client_id'] == booted_client_id
     rows.delete(rows.last)
-    assert rows.last['client_id'] == 19 
+    assert rows.last['client_id'] == last_client_id
   end
 
   test 'overbooting places a user in the last row' do
@@ -209,13 +212,16 @@ class UserTest < ActiveSupport::TestCase
 
 
     # boot 3 to 8 and move everyone else up one.
+    rows = merchant.get_rows(3, 8)
+    booted_client_id = rows.first['client_id']
+    last_client_id = rows.last['client_id']
     merchant.boot(3, 8)
     rows = merchant.get_rows(3, 8)
-    assert rows.first['client_id'] == 15
-    assert rows.last['client_id'] == 14
+    assert rows.first['client_id'] == booted_client_id + 1 
+    assert rows.last['client_id'] == booted_client_id
     assert QueueSlot.find(rows.last['id']).booted == true
     rows.delete(rows.last)
-    assert rows.last['client_id'] == 16 
+    assert rows.last['client_id'] == last_client_id 
   end
 
   test 'when user is destroyed, all known_merchants should be destroyed' do
