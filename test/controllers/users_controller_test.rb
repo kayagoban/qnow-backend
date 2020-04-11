@@ -7,19 +7,25 @@ class UsersControllerTest < ActionController::TestCase
   test 'get /known_merchants' do # test_get_merchants
     merchant = User.create(
       name: 'Konzum super', 
-      #session_id: SecureRandom.alphanumeric
     )
     merchant2 = User.create(
       name: 'Ljekarna', 
-      #session_id: SecureRandom.alphanumeric
     )
     merchant3 = User.create(
       name: 'Lidl u centru grada', 
-      #session_id: SecureRandom.alphanumeric
     )
     client = User.create
 
     client.known_merchants << [merchant, merchant2, merchant3]
+
+    # unauthorized
+    get :known_merchants
+    assert @response.status == 401
+
+    @request.session[:user_id] = 414141 
+    # still unauthorized
+    get :known_merchants
+    assert @response.status == 401
 
     @request.session[:user_id] = client.id
 
@@ -33,18 +39,15 @@ class UsersControllerTest < ActionController::TestCase
   end
 
 
-  test 'post /users/:id/enqueue' do
+  test 'post enqueue' do
     merchant = User.create(
       name: 'Konzum super', 
-      #session_id: SecureRandom.alphanumeric
     )
     merchant2 = User.create(
       name: 'Ljekarna', 
-      #session_id: SecureRandom.alphanumeric
     )
     merchant3 = User.create(
       name: 'Lidl u centru grada', 
-      #session_id: SecureRandom.alphanumeric
     )
     prev_user = User.create
     prev_user.joined_queue_slots.create(merchant: merchant3)
@@ -74,18 +77,15 @@ class UsersControllerTest < ActionController::TestCase
 
   end
 
-  test 'post :dequeue' do
+  test 'post dequeue' do
     merchant = User.create(
       name: 'Konzum super', 
-      #session_id: SecureRandom.alphanumeric
     )
     merchant2 = User.create(
       name: 'Ljekarna', 
-      #session_id: SecureRandom.alphanumeric
     )
     merchant3 = User.create(
       name: 'Lidl u centru grada', 
-      #session_id: SecureRandom.alphanumeric
     )
     prev_user = User.create
     prev_user.joined_queue_slots.create(merchant: merchant3)
@@ -110,48 +110,36 @@ class UsersControllerTest < ActionController::TestCase
 
   end
 
-  test 'get /status' do
+
+  test 'get status' do
+
+    merchant = User.create(
+      name: 'Konzum super', 
+    )
+    merchant2 = User.create(
+      name: 'Ljekarna', 
+    )
+    merchant3 = User.create(
+      name: 'Lidl u centru grada', 
+    )
+    prev_user = User.create
+    prev_user.joined_queue_slots.create(merchant: merchant3)
+    client = User.create
+
+    @request.session[:user_id] = client.id
+
+    client.known_merchants << [merchant, merchant2]
+
+    client.joined_queue_slots.create(merchant: merchant3)
+
+    get 'status'
+
+    r = JSON.parse @response.body
+
+    assert @response.status == 200
+    assert r.count == 3
+    assert r.last['pos'] == 2
+
   end
-
-
-  #  test 'create merchant' do
-  #    post '/users'
-  #    assert_response :success
-  #  end
-
-  #test 'get merchant slots' do
-  #  get '/merchants/1/slots'#, params: { id: 1 }
-  #, action: 'slots'
-  #  assert_response :success
-  #assert_template :index
-  #assert_not_nil assigns(:news)
-  #end
-
-  #test 'enqueue to merchant' do
-  #  post '/merchants/1/enqueue'
-  #  #, params: { id: 1 }
-  #  #, action: 'slots'
-  #  assert_response :success
-  ##  #assert_template :index
-  #  #assert_not_nil assigns(:news)
-  #  end
-  # 
-
-  # test "the truth" do
-  #   assert true
-  # end
-  #
-  # test "can create an article" do
-  #   get "/articles/new"
-  #   assert_response :success
-
-  #   post "/articles",
-  #   params: { article: { title: "can create", body: "article successfully." } }
-  #  assert_response :redirect
-  #  follow_redirect!
-  #  assert_response :success
-  #  assert_select "p", "Title:\n  can create"
-  #end
-  #
 
 end

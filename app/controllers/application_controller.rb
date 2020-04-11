@@ -2,13 +2,21 @@ class ApplicationController < ActionController::Base
 
   include ActionController::MimeResponds
 
-  def user_login
-    if session['user_id'].nil?
+  def create_user_login
+    begin
+      @user = User.find(session['user_id'])
+    rescue 
       @user = User.create
       session['user_id'] = @user.id
-    else
-      @user = User.find(session['user_id'])
     end
   end
- 
+
+  def require_user_login
+    begin
+      @user = User.find(session['user_id'])
+    rescue 
+      render(json: {}.to_json, status: 401) and return
+    end
+  end
+
 end

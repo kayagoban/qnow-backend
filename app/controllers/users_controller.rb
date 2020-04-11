@@ -1,6 +1,6 @@
-class UsersController < ApplicationController
-
-  before_action :user_login
+class UsersController < ApplicationController 
+  before_action :require_user_login, only: [:known_merchants, :status]
+  before_action :create_user_login, only: [:merchant, :enqueue, :dequeue]
 
   def known_merchants
   end
@@ -36,8 +36,8 @@ class UsersController < ApplicationController
 
   end
 
-  def slots
-    binding.pry
+  def status
+    @merchant_joins = @user.known_merchant_joins.includes(:merchant)
     render status: 200
   end
 
