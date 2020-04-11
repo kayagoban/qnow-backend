@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   delete 'dequeue', to: 'users#dequeue'
   get 'status', to: 'users#status'
   get 'merchant', to: 'users#merchant'
+  get 'transfer_code', to: 'users#transfer_code'
 
   #resources :queue, path: '/users/queue', only: [ :create ]
   #get '/users/:id/slots', to: 'merchants#slots'

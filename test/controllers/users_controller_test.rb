@@ -53,14 +53,11 @@ class UsersControllerTest < ActionController::TestCase
     prev_user.joined_queue_slots.create(merchant: merchant3)
 
     client = User.create
-
     client.known_merchants << [merchant, merchant2]
-
     @request.session[:user_id] = client.id
 
 
     post :enqueue, params: {  }
-
     assert @response.status == 404
 
     post :enqueue, params: { join_code: '34jl3kow' }
@@ -147,9 +144,6 @@ class UsersControllerTest < ActionController::TestCase
     merchant = User.create(
       name: 'Konzum super', 
     )
-    client = User.create
-
-    @request.session[:user_id] = client.id
 
     get 'merchant', params: { join_code: merchant.join_code }
 
@@ -157,6 +151,20 @@ class UsersControllerTest < ActionController::TestCase
 
     assert @response.status == 200
     assert r['name'] == merchant.name
+
+  end
+
+  test 'get transfer_code' do
+    client = User.create
+    @request.session[:user_id] = client.id
+
+    get 'transfer_code'
+
+    r = JSON.parse @response.body
+
+    assert client.transfer_code == r['transfer_code']
+
+
 
   end
 

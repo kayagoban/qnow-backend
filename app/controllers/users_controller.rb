@@ -1,5 +1,5 @@
 class UsersController < ApplicationController 
-  before_action :require_user_login, only: [:known_merchants, :status]
+  before_action :require_user_login, only: [:known_merchants, :status, :transfer_code]
   before_action :create_user_login, only: [:merchant, :enqueue, :dequeue]
 
   def known_merchants
@@ -7,6 +7,10 @@ class UsersController < ApplicationController
 
   def status
     @merchant_joins = @user.known_merchant_joins.includes(:merchant)
+  end
+
+  def transfer_code
+    render(json: { transfer_code: @user.transfer_code }.to_json) and return
   end
 
   def merchant
