@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   post 'enqueue', to: 'users#enqueue'
   delete 'dequeue', to: 'users#dequeue'
   get 'status', to: 'users#status'
+  get 'merchant', to: 'users#merchant'
 
   #resources :queue, path: '/users/queue', only: [ :create ]
   #get '/users/:id/slots', to: 'merchants#slots'

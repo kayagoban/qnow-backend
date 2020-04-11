@@ -5,6 +5,23 @@ class UsersController < ApplicationController
   def known_merchants
   end
 
+  def status
+    @merchant_joins = @user.known_merchant_joins.includes(:merchant)
+  end
+
+  def merchant
+    begin
+      merchant = User.find_by_join_code(params.require(:join_code))
+      @mjoin = @user.known_merchant_joins.create(merchant: merchant)
+      if @mjoin.invalid?
+        raise Error
+      end
+    rescue
+      render(json: {}.to_json, status: 404) and return
+    end
+
+  end
+
   def enqueue
     begin
       merchant = User.find_by_join_code(params.require(:join_code))
@@ -34,11 +51,6 @@ class UsersController < ApplicationController
       render(json: {}.to_json, status: 200) and return
     end
 
-  end
-
-  def status
-    @merchant_joins = @user.known_merchant_joins.includes(:merchant)
-    render status: 200
   end
 
 end

@@ -142,4 +142,22 @@ class UsersControllerTest < ActionController::TestCase
 
   end
 
+  test 'get merchant' do
+
+    merchant = User.create(
+      name: 'Konzum super', 
+    )
+    client = User.create
+
+    @request.session[:user_id] = client.id
+
+    get 'merchant', params: { join_code: merchant.join_code }
+
+    r = JSON.parse @response.body
+
+    assert @response.status == 200
+    assert r['name'] == merchant.name
+
+  end
+
 end
