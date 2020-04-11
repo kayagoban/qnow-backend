@@ -1,6 +1,6 @@
 class UsersController < ApplicationController 
   before_action :require_user_login, only: [:known_merchants, :status]
-  before_action :create_user_login, only: [:transfer_code, :merchant, :enqueue, :dequeue, :enable_queue, :disable_queue]
+  before_action :create_user_login, only: [:transfer_code, :merchant, :enqueue, :dequeue, :enable_queue, :disable_queue, :transfer]
   
   def known_merchants
   end
@@ -86,6 +86,26 @@ class UsersController < ApplicationController
       @user.save
     end
     render(json: {}.to_json, status: 200)
+  end
+
+  def transfer
+    begin
+      original_user = User.find_by_transfer_code(params.require(:transfer_code))
+    rescue ActionController::ParameterMissing
+      render_404 and return
+    end
+
+    if original_user.nil?
+      render_404 and return
+    end
+
+    session['user_id'] = original_user.id 
+
+    ActiveRecord::Base.transaction do
+      original_user.transfer_code = SecureRandom.alphanumeric
+      original_user.save
+      @user.destroy
+    end
   end
 
   def render_404

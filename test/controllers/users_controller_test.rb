@@ -138,6 +138,21 @@ class UsersControllerTest < ActionController::TestCase
     assert merchant.owned_queue_slots.count == 0
   end
 
+  test 'post transfer' do
+    original_client = User.create
+    merchant = User.create
+    original_client.merchants << merchant
+
+    new_client = User.create
+    @request.session[:user_id] = new_client.id
+ 
+    post 'transfer', params: { transfer_code: original_client.transfer_code }
+    assert @request.session[:user_id] == original_client.id
+    assert_raises(ActiveRecord::RecordNotFound) do
+      new_client.reload
+    end
+    
+  end
 
   test 'get status' do
 

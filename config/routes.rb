@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   get 'transfer_code', to: 'users#transfer_code'
   post 'enable_queue', to: 'users#enable_queue'
   post 'disable_queue', to: 'users#disable_queue'
+  post 'transfer', to: 'users#transfer'
 
 end
