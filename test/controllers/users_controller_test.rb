@@ -56,6 +56,10 @@ class UsersControllerTest < ActionController::TestCase
     @request.session[:user_id] = client.id
 
 
+    post :enqueue, params: {  }
+
+    assert @response.status == 404
+
     post :enqueue, params: { join_code: '34jl3kow' }
     r = JSON.parse @response.body
 
@@ -70,7 +74,40 @@ class UsersControllerTest < ActionController::TestCase
 
   end
 
-  test 'post /merchants/:id/dequeue' do
+  test 'post :dequeue' do
+    merchant = User.create(
+      name: 'Konzum super', 
+      #session_id: SecureRandom.alphanumeric
+    )
+    merchant2 = User.create(
+      name: 'Ljekarna', 
+      #session_id: SecureRandom.alphanumeric
+    )
+    merchant3 = User.create(
+      name: 'Lidl u centru grada', 
+      #session_id: SecureRandom.alphanumeric
+    )
+    prev_user = User.create
+    prev_user.joined_queue_slots.create(merchant: merchant3)
+
+    client = User.create
+
+    @request.session[:user_id] = client.id
+
+    client.known_merchants << [merchant, merchant2]
+
+    delete :dequeue, params: { id: merchant3.id }
+    r = JSON.parse @response.body
+    assert @response.status == 404
+
+    client.joined_queue_slots.create(merchant: merchant3)
+
+    delete :dequeue, params: { id: merchant3.id }
+    r = JSON.parse @response.body
+    assert @response.status == 200
+    assert client.joined_queue_slots.count == 0
+    assert merchant3.owned_queue_slots.count == 1
+
   end
 
   test 'get /status' do

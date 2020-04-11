@@ -6,7 +6,11 @@ class UsersController < ApplicationController
   end
 
   def enqueue
-    merchant = User.find_by_join_code(params.require(:join_code))
+    begin
+      merchant = User.find_by_join_code(params.require(:join_code))
+    rescue ActionController::ParameterMissing
+      render(json: {}.to_json, status: 404) and return
+    end
     @queue_slot = @user.joined_queue_slots.create(merchant: merchant)
 
     if @queue_slot.invalid?
@@ -15,8 +19,21 @@ class UsersController < ApplicationController
   end
 
   def dequeue
-    binding.pry
-    render status: 200
+    begin
+      merchant = User.find(params.require(:id))
+    rescue ActionController::ParameterMissing
+      render(json: {}.to_json, status: 404) and return
+    end
+ 
+    q_slots = @user.joined_queue_slots.where(merchant: merchant)
+
+    if q_slots.empty?
+      render(json: {}.to_json, status: 404) and return
+    else
+      @user.joined_queue_slots.delete(q_slots)
+      render(json: {}.to_json, status: 200) and return
+    end
+
   end
 
   def slots
