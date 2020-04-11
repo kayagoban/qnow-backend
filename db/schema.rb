@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_154313) do
     t.string "name", default: ""
     t.integer "qlength", default: 0
     t.integer "queue_slots_count", default: 0
+    t.boolean "queue_enabled", default: false
     t.index ["join_code"], name: "index_users_on_join_code"
     t.index ["transfer_code"], name: "index_users_on_transfer_code"
   end

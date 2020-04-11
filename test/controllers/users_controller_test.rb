@@ -3,8 +3,7 @@ require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
 
-
-  test 'get /known_merchants' do # test_get_merchants
+  test 'get known_merchants' do # test_get_merchants
     merchant = User.create(
       name: 'Konzum super', 
     )
@@ -62,8 +61,16 @@ class UsersControllerTest < ActionController::TestCase
 
     post :enqueue, params: { join_code: '34jl3kow' }
     r = JSON.parse @response.body
-
+    # incorrect join code
     assert @response.status == 404
+
+    post :enqueue, params: { join_code: merchant3.join_code }
+    r = JSON.parse @response.body
+    # queue not enabled
+    assert @response.status == 404
+
+    merchant3.queue_enabled = true
+    merchant3.save
 
     post :enqueue, params: { join_code: merchant3.join_code }
     r = JSON.parse @response.body
@@ -93,18 +100,42 @@ class UsersControllerTest < ActionController::TestCase
 
     client.known_merchants << [merchant, merchant2]
 
-    delete :dequeue, params: { id: merchant3.id }
-    r = JSON.parse @response.body
-    assert @response.status == 404
-
     client.joined_queue_slots.create(merchant: merchant3)
 
     delete :dequeue, params: { id: merchant3.id }
     r = JSON.parse @response.body
+    # queue not enabled
+    assert @response.status == 404
+
+    merchant3.queue_enabled = true
+    merchant3.save
+
+    delete :dequeue, params: { id: merchant3.id }
+    r = JSON.parse @response.body
+
     assert @response.status == 200
     assert client.joined_queue_slots.count == 0
     assert merchant3.owned_queue_slots.count == 1
 
+  end
+
+  test 'post enable_queue' do
+    client = User.create
+    @request.session[:user_id] = client.id
+    post 'enable_queue'
+    assert client.reload.queue_enabled?
+  end
+
+  test 'post disable_queue' do
+    merchant = User.create
+    User.create.merchants << merchant
+    User.create.merchants << merchant
+    User.create.merchants << merchant
+    @request.session[:user_id] = merchant.id
+
+    post 'disable_queue'
+    assert_not merchant.reload.queue_enabled?
+    assert merchant.owned_queue_slots.count == 0
   end
 
 

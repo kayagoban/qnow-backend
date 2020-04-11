@@ -7,6 +7,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.string :name, default: ""
       t.integer :qlength, default: 0
       t.integer :queue_slots_count, default: 0
+      t.boolean :queue_enabled, default: false
     end
 
     add_index :users, :join_code
