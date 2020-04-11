@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   #resources :merchants 
   get 'known_merchants', to:  'users#known_merchants'
+  post 'enqueue', to: 'users#enqueue'
+
+  #resources :queue, path: '/users/queue', only: [ :create ]
   #get '/users/:id/slots', to: 'merchants#slots'
   #post '/users/session', to: 'merchants#create'
   #post '/users/:id/enqueue', to: 'merchants#enqueue'

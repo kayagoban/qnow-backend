@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
     else
       @user = User.find(session['user_id'])
     end
-    
   end
  
 end

@@ -2,7 +2,8 @@ class User < ApplicationRecord
 
   class BootException < Exception; end
 
-  after_initialize :set_transfer_code
+
+  before_create :set_codes
 
   # merchant role associations
   has_many :known_client_joins, class_name: 'KnownMerchantUser', foreign_key: :merchant_id, dependent: :destroy, inverse_of: :merchant
@@ -26,8 +27,9 @@ class User < ApplicationRecord
   has_many :merchants, through: :joined_queue_slots, source: :merchant
 
 
-  def set_transfer_code
-    transfer_code = SecureRandom.alphanumeric
+  def set_codes
+    self.transfer_code = SecureRandom.alphanumeric
+    self.join_code = SecureRandom.alphanumeric
   end
 
  

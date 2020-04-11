@@ -4,7 +4,6 @@ class UserTest < ActiveSupport::TestCase
 
   test "can create user" do
     user = User.create(
-      session_id: SecureRandom.alphanumeric
     )
 
     assert user.valid?
@@ -12,12 +11,10 @@ class UserTest < ActiveSupport::TestCase
 
   test "can join queue" do
     user = User.create(
-      session_id: SecureRandom.alphanumeric
     )
 
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
 
     q = QueueSlot.create(merchant: merchant, client: user)
@@ -27,12 +24,10 @@ class UserTest < ActiveSupport::TestCase
 
   test "can't have multiple queueslots per merchant" do
     user = User.create(
-      session_id: SecureRandom.alphanumeric
     )
 
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
 
     q = QueueSlot.create(client: user, merchant: merchant)
@@ -47,12 +42,10 @@ class UserTest < ActiveSupport::TestCase
 
   test "deletes queue when user is deleted" do
     user = User.create(
-      session_id: SecureRandom.alphanumeric
     )
 
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
 
     q = QueueSlot.create(client: user, merchant: merchant)
@@ -74,12 +67,10 @@ class UserTest < ActiveSupport::TestCase
   test "can get a queueslot" do
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
 
     (1..10).each do
       user = User.create(
-        session_id: SecureRandom.alphanumeric
       )
 
       q = QueueSlot.create(
@@ -94,12 +85,10 @@ class UserTest < ActiveSupport::TestCase
   test "can get queueslots" do
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
 
     (1..10).each do
       user = User.create(
-        session_id: SecureRandom.alphanumeric
       )
 
       q = QueueSlot.create(
@@ -119,12 +108,10 @@ class UserTest < ActiveSupport::TestCase
   test "can admit a user" do
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
 
     (1..10).each do
       user = User.create(
-        session_id: SecureRandom.alphanumeric
       )
 
       q = QueueSlot.create(
@@ -142,7 +129,6 @@ class UserTest < ActiveSupport::TestCase
   test 'can boot a user back through the line' do
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
 
     # unrelated QueueSlots
@@ -152,7 +138,6 @@ class UserTest < ActiveSupport::TestCase
 
     (1..20).each do
       user = User.create(
-        session_id: SecureRandom.alphanumeric
       )
 
       q = QueueSlot.create(
@@ -184,7 +169,6 @@ class UserTest < ActiveSupport::TestCase
   test 'overbooting places a user in the last row' do
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
 
     # unrelated QueueSlots
@@ -196,12 +180,10 @@ class UserTest < ActiveSupport::TestCase
 
     (1..5).each do
       user = User.create(
-        session_id: SecureRandom.alphanumeric
       )
 
       q = QueueSlot.create(
-        merchant: merchant, 
-        client: user
+        merchant: merchant, client: user
       )
     end
 
@@ -227,11 +209,9 @@ class UserTest < ActiveSupport::TestCase
   test 'when user is destroyed, all known_merchants should be destroyed' do
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
     merchant2 = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
     client = User.create
 
@@ -247,11 +227,9 @@ class UserTest < ActiveSupport::TestCase
   test 'when merchant is destroyed, all known_merchants should be destroyed' do
     merchant = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
     merchant2 = User.create(
       name: Faker::Name.name, 
-      session_id: SecureRandom.alphanumeric
     )
     client = User.create
 

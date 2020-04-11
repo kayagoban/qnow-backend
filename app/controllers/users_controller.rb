@@ -1,16 +1,17 @@
 class UsersController < ApplicationController
 
-  #respond_to :json
+  before_action :user_login
 
   def known_merchants
-    user_login
-    #binding.pry
-    #render status: 200, json: @user.known_merchants
   end
 
   def enqueue
-    binding.pry
-    render status: 200
+    merchant = User.find_by_join_code(params.require(:join_code))
+    @queue_slot = @user.joined_queue_slots.create(merchant: merchant)
+
+    if @queue_slot.invalid?
+      render(json: {  }.to_json, status: 404)
+    end
   end
 
   def dequeue
