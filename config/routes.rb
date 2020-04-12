@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   post 'disable_queue', to: 'users#disable_queue'
   post 'transfer', to: 'users#transfer'
 
+  root to: redirect('index.html')
+
 end
