@@ -1,10 +1,46 @@
 class MerchantsController < ApplicationController 
-  #before_action :require_user_login, only: [:known_merchants, :status]
-  before_action :create_user_login #, only: [:transfer_code, :merchant, :enqueue, :dequeue, :enable_queue, :disable_queue, :transfer]
+  before_action :create_user_login
+
+  def manage
+    if @user.queue_enabled?
+      render 'status'
+    else
+      render 'show'
+    end
+  end
+
+  def randomshit
+    binding.pry
+  end
   
-  def disable_queue
+  def empty_queue
+    binding.pry
     ActiveRecord::Base.transaction do
       @user.owned_queue_slots.delete_all
+    end
+    render 'status'
+  end
+
+  def update
+    binding.pry
+    render 'status'
+  end
+
+  def queue_pdf
+  end
+
+  def reset_join_code
+    render 'queue_pdf'
+  end
+
+  def show
+  end
+
+  def status
+  end
+
+  def disable_queue
+    ActiveRecord::Base.transaction do
       @user.queue_enabled = false
       @user.save
     end

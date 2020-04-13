@@ -1,0 +1,157 @@
+
+<%= render partial: 'shared/head', locals: { title: 'Qnow - Settings' }  %>
+
+<style>
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  float:right;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input.default:checked + .slider {
+  background-color: #444;
+}
+input.primary:checked + .slider {
+  background-color: #2196F3;
+}
+input.success:checked + .slider {
+  background-color: #8bc34a;
+}
+input.info:checked + .slider {
+  background-color: #3de0f5;
+}
+input.warning:checked + .slider {
+  background-color: #FFC107;
+}
+input.danger:checked + .slider {
+  background-color: #f44336;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+            }
+
+            /* Rounded sliders */
+            .slider.round {
+              border-radius: 34px;
+            }
+
+            .slider.round:before {
+              border-radius: 50%;
+            }
+</style>
+
+<body>
+
+<%= render 'shared/nav' =%>
+
+<%= form_tag('management_settings', method: :put) %>
+  <div class="input-group mb-3" style="margin-bottom: 5px; padding: 5px 5px 0px 5px;">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1">Queue Label:</span>
+    </div>
+
+    <input type="text" class="form-control" placeholder="Konzum Ozaljska ul." aria-label="q_label" aria-describedby="basic-addon1">
+  </div>
+
+  <div class="input-group mb-3" style= "margin-bottom: 5px; padding: 0px 5px 0px 5px;">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon2">Length of physical queue:</span>
+    </div>
+    <input type="text" class="form-control" placeholder="" aria-label="pq_len" aria-describedby="basic-addon2">
+  </div>
+
+
+  <div class="jumbotron-fluid sjf" style="padding: 0px 5px 0px 5px; margin-bottom: 0px;">
+
+    <div class="row" style="padding-bottom: 0px;">
+      <div class="col-auto">
+        <span class="h3">Queue enabled:</span>
+      </div>
+
+      <div class="col">
+        <label class="switch ">	 <input type="checkbox" class="primary">
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <div class="container-fluid" style="padding: 5px 5px 25px 5px;">
+    <button type="submit" class="btn btn-primary btn-lg btn-block">
+      Update preferences	
+    </button>
+  </div>
+
+</form>
+
+
+
+<form method="post" action="reset_queue">
+ 
+  <div class="container-fluid" style="padding: 10px;">
+    <button type="submit" class="btn btn-secondary btn-lg btn-block">
+      Reset Queue	
+    </button>
+  </div>
+
+
+</form>
+
+<form method="post" action="reset_qrcode">
+ 
+  <div class="container-fluid" style="padding: 10px;">
+    <button type="submit" class="btn btn-secondary btn-lg btn-block">
+      Reset QRcode
+    </button>
+  </div>
+
+
+</form>
+
+
+
+<%= render 'shared/footer' =%>
+
+
+

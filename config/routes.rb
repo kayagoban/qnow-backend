@@ -15,7 +15,6 @@ Rails.application.routes.draw do
   post 'transfer', to: 'users#transfer'
 
 
-
   # deprecated.
   post 'enable_queue', to: 'users#enable_queue'
   post 'disable_queue', to: 'users#disable_queue'
@@ -24,13 +23,17 @@ Rails.application.routes.draw do
   # Management role routes
   #
   
-  # html and json versions
-  get 'management_status', to: 'merchants#manage_status'
-  get 'join_code', to: 'merchants#join_code'
+  #redirects to either 'merchants#show' or'merchants#status'
+  get 'management'          , to: 'merchants#manage'
+
+  get 'management_status', to: 'merchants#status'
+
   get 'management_settings', to: 'merchants#show'
   put 'management_settings', to: 'merchants#update'
-  post 'empty_queue', to: 'merchants#empty_queue'
 
+  get 'queue_pdf', to: 'merchants#queue_pdf'
+  post 'reset_queue', to: 'merchants#reset_queue'
+  post 'reset_qrcode', to: 'merchants#reset_qrcode'
 
 
 end
