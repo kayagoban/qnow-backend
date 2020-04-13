@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<style>
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  float:right;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input.default:checked + .slider {
+  background-color: #444;
+}
+input.primary:checked + .slider {
+  background-color: #2196F3;
+}
+input.success:checked + .slider {
+  background-color: #8bc34a;
+}
+input.info:checked + .slider {
+  background-color: #3de0f5;
+}
+input.warning:checked + .slider {
+  background-color: #FFC107;
+}
+input.danger:checked + .slider {
+  background-color: #f44336;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+
+		<title>Qnow - management</title>
+	</head>
+	<body>
+
+	<%= render 'shared/nav' =%>
+
+		<div class="container-fluid" style="padding: 15px;">
+			<div class="row" >
+				<div class="col">
+					<span id="queue_count" class="h1" >34</span> in queue	
+				</div>
+
+				<div class="col">
+					<form action="queues.html">
+						<button type="submit" class="btn btn-primary btn-lg btn-block">
+							Admit User	
+						</button>
+					</form>
+				</div>
+			</div>
+
+		</div>
+
+		<form method="post" action="/users">
+			<div class="input-group mb-3" style="margin-bottom: 10px; padding: 5px;">
+				<div class="input-group-prepend">
+					<span class="input-group-text" id="basic-addon1">Queue Label:</span>
+				</div>
+
+				<input type="text" class="form-control" placeholder="Konzum Ozaljska ul." aria-label="q_label" aria-describedby="basic-addon1">
+			</div>
+
+			<div class="input-group mb-3" style="margin-bottom: 10px; padding: 5px;">
+				<div class="input-group-prepend">
+					<span class="input-group-text" id="basic-addon2">Length of physical queue:</span>
+				</div>
+				<input type="text" class="form-control" placeholder="" aria-label="pq_len" aria-describedby="basic-addon2">
+			</div>
+
+
+			<div class="jumbotron-fluid sjf" style="padding: 15px; margin-bottom: 10px;">
+
+				<div class="row" style="padding-bottom: 0px;">
+					<div class="col-auto">
+						<span class="h3">Queue enabled:</span>
+					</div>
+
+					<div class="col">
+						<label class="switch ">	 <input type="checkbox" class="primary">
+							<span class="slider round"></span>
+						</label>
+					</div>
+
+				</div>
+
+
+			</div>
+
+			<div class="container-fluid" style="padding: 15px;">
+				<button type="submit" class="btn btn-primary btn-lg btn-block">
+					Update preferences	
+				</button>
+			</div>
+			<div class="container-fluid" style="padding: 15px;">
+				<button type="submit" class="btn btn-primary btn-lg btn-block">
+					Print QRCode	
+				</button>
+			</div>
+
+
+		</form>
+
+
+
+
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+		</body>
+		</html>
+
