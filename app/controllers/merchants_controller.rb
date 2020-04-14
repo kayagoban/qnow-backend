@@ -4,6 +4,11 @@ class MerchantsController < ApplicationController
 
   before_action :create_user_login
 
+  def admit
+    @user.admit
+    redirect_to action: :status
+  end
+
   def manage
     if @user.queue_enabled?
       render 'status'
@@ -16,6 +21,7 @@ class MerchantsController < ApplicationController
     ActiveRecord::Base.transaction do
       @user.owned_queue_slots.delete_all
     end
+    #redirect_to action: :status
     render 'status'
   end
 
@@ -38,7 +44,7 @@ class MerchantsController < ApplicationController
 
   def queue_pdf
     
-    port = 33851
+    port = 32835
     data_url = "http://192.168.43.64:#{port}/add_queue/#{@user.join_code}"
     #data_url= "https://hr.qnow.app/add_queue/#{@user.join_code}"
     qrcode = RQRCode::QRCode.new(data_url, level: :h, size: 20)

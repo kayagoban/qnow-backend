@@ -7,6 +7,7 @@
 <% @merchant_joins.each do |mjoin| %>
 
   <% if mjoin.position != 0 %>
+
     <div id="<%= mjoin.merchant.id %>" class="jumbotron" style="border-color: crimson; padding: 10px; margin-bottom: 10px">
       <span class="h2">
         <%= mjoin.merchant.name %>
@@ -26,25 +27,66 @@
           <span class="h5"><%= mjoin.merchant.queue_slots_count %> u redu</span>
         </div>
       </div>
-    </div>
-    <hr class="my-3">
-  <% else %>
-    <div id="<%= mjoin.id %>" class="jumbotron" style="border-color: crimson; padding: 10px; margin-bottom: 10px">
-      <span class="h2">
-        <%= mjoin.merchant.name %>
-      </span>
-      <hr class="my-2">
+
       <div class="row" style="padding-bottom: 0px;">
-        <div class="col-auto">
-          <span class="h5">13424 u redu</span>
+        <div class="col">
+          <%= form_tag('exit_queue', method: :post) %>
+          <form action="management_settings">
+            <%= hidden_field_tag('join_code', mjoin.merchant.join_code) %>
+            <button type="submit" class="btn btn-danger btn-sm btn-block">
+              Exit queue 
+            </button>
+          </form>
+
+        </div>
+
+        <div class="col">
+        </div>
+
+      </div>
+
+    <% else %>
+
+
+      <div id="<%= mjoin.id %>" class="jumbotron" style="border-color: crimson; padding: 10px; margin-bottom: 10px">
+        <span class="h2">
+          <%= mjoin.merchant.name %>
+        </span>
+        <hr class="my-2">
+        <div class="row" style="padding-bottom: 0px;">
+          <div class="col-auto">
+            <span class="h5"><%= mjoin.merchant.queue_slots_count %> u redu</span>
+          </div>
+        </div>
+
+        <hr class="my-2">
+        <div class="row" style="padding-bottom: 0px;">
+          <div class="col">
+            <%= form_tag('join_queue', method: :post) %>
+            <form action="management_settings">
+              <%= hidden_field_tag('join_code', mjoin.merchant.join_code) %>
+              <button type="submit" class="btn btn-primary btn-sm btn-block">
+                Join queue
+              </button>
+            </form>
+
+          </div>
+          <div class="col">
+
+            <%= form_tag('remove_queue', method: :post) %>
+            <%= hidden_field_tag('join_code', mjoin.merchant.join_code) %>
+            <form action="management_settings">
+              <button type="submit" class="btn btn-danger btn-sm btn-block">
+                Remove queue
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-    <hr class="my-2">
+    <% end %>
+
+
+
   <% end %>
 
-
-
-<% end %>
-
-<%= render 'shared/footer' =%>
+  <%= render 'shared/footer' =%>

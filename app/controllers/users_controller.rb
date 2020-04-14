@@ -34,51 +34,66 @@ class UsersController < ApplicationController
 
   end
 
-  def enqueue
+  def remove_queue
     begin
       merchant = User.find_by_join_code(params.require(:join_code))
     rescue ActionController::ParameterMissing
+      # flash error and return
+      render_404 and return
+    end
+
+    @user.known_merchants.delete(merchant)
+    redirect_to action: :status
+  end
+
+  def join_queue 
+    begin
+      merchant = User.find_by_join_code(params.require(:join_code))
+    rescue ActionController::ParameterMissing
+      # flash error and return
       render_404 and return
     end
 
     if merchant.nil?
+      # flash error and return
       render_404 and return
     end
 
     if not merchant.queue_enabled?
+      # flash error and return
       render_404 and return
     end
  
     @queue_slot = @user.joined_queue_slots.create(merchant: merchant)
 
-    if @queue_slot.invalid?
-      render_404 
-    end
+    #if @queue_slot.invalid?
+    #  render_404 
+    #end
+    redirect_to action: :status
   end
 
-  def dequeue
+  def exit_queue
     begin
-      merchant = User.find(params.require(:id))
+      merchant = User.find_by_join_code(params.require(:join_code))
     rescue ActionController::ParameterMissing
+      # flash error and return
       render_404 and return
     end
 
     if merchant.nil?
+      # flash error and return
       render_404 and return
     end
 
     if not merchant.queue_enabled?
+      # flash error and return
       render_404 and return
     end
  
     q_slots = @user.joined_queue_slots.where(merchant: merchant)
 
-    if q_slots.empty?
-      render_404 and return
-    else
-      @user.joined_queue_slots.delete(q_slots)
-      render(json: {}.to_json, status: 200) and return
-    end
+    @user.joined_queue_slots.delete(q_slots)
+    redirect_to action: :status
   end
 
   def enable_queue
@@ -117,7 +132,7 @@ class UsersController < ApplicationController
   end
 
   def render_404
-    render(json: {}.to_json, status: 404)
+    render(status: 404)
   end
 
 end
