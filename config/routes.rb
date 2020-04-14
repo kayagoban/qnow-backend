@@ -11,14 +11,12 @@ Rails.application.routes.draw do
   get 'transfer_code', to: 'users#transfer_code'
   put 'enqueue', to: 'users#enqueue'
   put 'dequeue', to: 'users#dequeue'
-  post 'add_merchant', to: 'users#add_merchant'
+  get 'add_queue/:id', to: 'users#add_queue'
   post 'transfer', to: 'users#transfer'
-
 
   # deprecated.
   post 'enable_queue', to: 'users#enable_queue'
   post 'disable_queue', to: 'users#disable_queue'
-
 
   # Management role routes
   #
@@ -33,7 +31,7 @@ Rails.application.routes.draw do
 
   get 'queue_pdf', to: 'merchants#queue_pdf'
   post 'reset_queue', to: 'merchants#reset_queue'
-  post 'reset_qrcode', to: 'merchants#reset_qrcode'
+  post 'reset_queue_pdf', to: 'merchants#reset_queue_pdf'
 
 
 end

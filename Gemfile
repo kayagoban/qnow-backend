@@ -7,6 +7,8 @@ ruby '2.5.8'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', '~> 1.4'
+gem 'prawn'
+gem 'prawn-qrcode'
 
 gem 'redis'
 gem 'redis-rails'

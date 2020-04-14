@@ -88,14 +88,16 @@ input:focus + .slider {
       <span class="input-group-text" id="basic-addon1">Queue Label:</span>
     </div>
 
-    <input type="text" class="form-control" placeholder="Konzum Ozaljska ul." aria-label="q_label" aria-describedby="basic-addon1">
+    <%= text_field_tag 'name', @user.name, class: 'form-control', 'aria-label' => "q_label", 'aria-describedby' => "basic-addon1" %>
+    <!--input type="text" class="form-control" value="<%= @user.name %>"  aria-label="q_label" aria-describedby="basic-addon1"-->
   </div>
 
   <div class="input-group mb-3" style= "margin-bottom: 5px; padding: 0px 5px 0px 5px;">
     <div class="input-group-prepend">
-      <span class="input-group-text" id="basic-addon2">Length of physical queue:</span>
+      <span class="input-group-text" id="basic-addon2">Number of waiting slots:</span>
     </div>
-    <input type="text" class="form-control" placeholder="" aria-label="pq_len" aria-describedby="basic-addon2">
+    <%= text_field_tag 'pq_len', @user.qlength, class: 'form-control', 'aria-label' => "pq_len", 'aria-describedby' => "basic-addon2" %>
+    <!--input type="text" class="form-control" value="<%= @user.qlength %>" aria-label="pq_len" aria-describedby="basic-addon2"-->
   </div>
 
 
@@ -107,7 +109,8 @@ input:focus + .slider {
       </div>
 
       <div class="col">
-        <label class="switch ">	 <input type="checkbox" class="primary">
+        <label class="switch ">	 
+          <%= check_box_tag 'queue_enabled', 'queue_enabled', @user.queue_enabled?, class: 'primary' %>
           <span class="slider round"></span>
         </label>
       </div>
@@ -117,7 +120,7 @@ input:focus + .slider {
 
   </div>
 
-  <div class="container-fluid" style="padding: 5px 5px 25px 5px;">
+  <div class="container-fluid" style="padding: 10px 10px 25px 10px;">
     <button type="submit" class="btn btn-primary btn-lg btn-block">
       Update preferences	
     </button>
@@ -127,26 +130,21 @@ input:focus + .slider {
 
 
 
-<form method="post" action="reset_queue">
- 
+<%= form_tag('reset_queue', method: :post) %>
   <div class="container-fluid" style="padding: 10px;">
     <button type="submit" class="btn btn-secondary btn-lg btn-block">
-      Reset Queue	
+      Delete all in Queue	
     </button>
   </div>
-
-
 </form>
 
-<form method="post" action="reset_qrcode">
- 
+
+<%= form_tag('reset_queue_pdf', method: :post) %>
   <div class="container-fluid" style="padding: 10px;">
     <button type="submit" class="btn btn-secondary btn-lg btn-block">
       Reset QRcode
     </button>
   </div>
-
-
 </form>
 
 
