@@ -9,35 +9,44 @@
 <div class="container-fluid" style="padding: 15px;">
   <div class="row" >
     <div class="col">
-      <span id="queue_count" class="h1" >34</span> in queue	
+      <span id="queue_count" class="h1" ><%= @user.queue_slots_count %></span> in queue	
     </div>
 
     <div class="col">
-      <form action="queues.html">
-        <button type="submit" class="btn btn-primary btn-lg btn-block">
-          Admit User	
-        </button>
-      </form>
-    </div>
+
+      <%= form_tag('admit_user', method: :post) %>
+      <button type="submit" class="btn btn-primary btn-lg btn-block">
+        Admit User	
+      </button>
+    </form>
+  </div>
   </div>
 
 </div>
 
-  <div class="container-fluid" style="padding: 15px;">
-    <form action="queue_pdf">
-    <button type="submit" class="btn btn-primary btn-lg btn-block">
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="container-fluid">
+  <form action="management_settings">
+    <button type="submit" class="btn btn-secondary btn-lg btn-block">
+      Settings
+    </button>
+  </form>
+</div>
+
+
+<div class="container-fluid" style="padding: 15px;">
+  <form action="queue_pdf">
+    <button type="submit" class="btn btn-secondary btn-lg btn-block">
       Print QRCode	
     </button>
-  </div>
-
-  <div class="container-fluid">
-    <form action="management_settings">
-      <button type="submit" class="btn btn-secondary btn-lg btn-block">
-        Upravlljajte redom
-      </button>
-    </form>
-  </div>
+  </form>
+</div>
 
 
+<%= render 'shared/footer' =%>
 
-  <%= render 'shared/footer' =%>

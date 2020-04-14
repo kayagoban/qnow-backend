@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   #redirects to either 'merchants#show' or'merchants#status'
   get 'management'          , to: 'merchants#manage'
 
+  post 'admit_user', to: 'merchants#admit'
+
   get 'management_status', to: 'merchants#status'
 
   get 'management_settings', to: 'merchants#show'

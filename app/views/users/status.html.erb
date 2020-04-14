@@ -1,0 +1,50 @@
+<%= render partial: 'shared/head', locals: { title: 'Qnow - Settings' }  %>
+
+<body>
+
+<%= render 'shared/nav' =%>
+
+<% @merchant_joins.each do |mjoin| %>
+
+  <% if mjoin.position != 0 %>
+    <div id="<%= mjoin.merchant.id %>" class="jumbotron" style="border-color: crimson; padding: 10px; margin-bottom: 10px">
+      <span class="h2">
+        <%= mjoin.merchant.name %>
+      </span>
+      <hr class="my-2">
+      <div class="row" style="padding-bottom: 0px;">
+        <div class="col">
+          <span class="h1">
+            <%= mjoin.position %>
+          </span>
+        </div>
+        <div class="col">
+          <span class="h4">od</span>
+        </div>
+
+        <div class="col-auto">
+          <span class="h5"><%= mjoin.merchant.queue_slots_count %> u redu</span>
+        </div>
+      </div>
+    </div>
+    <hr class="my-3">
+  <% else %>
+    <div id="<%= mjoin.id %>" class="jumbotron" style="border-color: crimson; padding: 10px; margin-bottom: 10px">
+      <span class="h2">
+        <%= mjoin.merchant.name %>
+      </span>
+      <hr class="my-2">
+      <div class="row" style="padding-bottom: 0px;">
+        <div class="col-auto">
+          <span class="h5">13424 u redu</span>
+        </div>
+      </div>
+    </div>
+    <hr class="my-2">
+  <% end %>
+
+
+
+<% end %>
+
+<%= render 'shared/footer' =%>
