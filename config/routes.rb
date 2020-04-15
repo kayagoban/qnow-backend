@@ -1,14 +1,15 @@
 Rails.application.routes.draw do
 
-  root to: redirect('index.html')
 
+  #root to: redirect('status')
+  root to: redirect('status')
   # Client role routes
   #
   # html and json versions
   get 'status', to: 'users#status'
 
   get 'known_merchants', to:  'users#known_merchants'
-  get 'transfer_code', to: 'users#transfer_code'
+  post 'transfer_code', to: 'users#transfer_code'
 
   put 'enqueue', to: 'users#enqueue'
   put 'dequeue', to: 'users#dequeue'
@@ -38,7 +39,7 @@ Rails.application.routes.draw do
   get 'management_settings', to: 'merchants#show'
   put 'management_settings', to: 'merchants#update'
 
-  get 'queue_pdf', to: 'merchants#queue_pdf'
+  post 'queue_pdf', to: 'merchants#queue_pdf'
   post 'reset_queue', to: 'merchants#reset_queue'
   post 'reset_queue_pdf', to: 'merchants#reset_queue_pdf'
 

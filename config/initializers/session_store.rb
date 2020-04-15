@@ -12,4 +12,5 @@
 #  threadsafe: true,
 #  signed: true,
 #  secure: true
-Rails.application.config.session_store :cookie_store, key: '_your_app_session'
+#Rails.application.config.session_store :cookie_store, key: '_your_app_session'
+Rails.application.config.session_store :cookie_store, key: "_qnow_session_#{Rails.env}", domain: :all, expires: 1.year

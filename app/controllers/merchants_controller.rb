@@ -44,7 +44,7 @@ class MerchantsController < ApplicationController
 
   def queue_pdf
     
-    port = 32835
+    port = 44007
     data_url = "http://192.168.43.64:#{port}/add_queue/#{@user.join_code}"
     #data_url= "https://hr.qnow.app/add_queue/#{@user.join_code}"
     qrcode = RQRCode::QRCode.new(data_url, level: :h, size: 20)
