@@ -82,7 +82,7 @@ input:focus + .slider {
 
 <%= render 'shared/nav' =%>
 
-<%= form_tag('management_settings', method: :put) %>
+<%= form_tag('/management_settings', method: :put) %>
   <div class="input-group mb-3" style="margin-bottom: 5px; padding: 5px 5px 0px 5px;">
     <div class="input-group-prepend">
       <span class="input-group-text" id="basic-addon1">Queue Label:</span>
@@ -127,7 +127,7 @@ input:focus + .slider {
 
 
 
-<%= form_tag('reset_queue', method: :post) %>
+<%= form_tag('/reset_queue', method: :post) %>
   <div class="container-fluid" style="padding: 10px;">
     <button type="submit" class="btn btn-secondary btn-lg btn-block">
       Delete all in Queue	
@@ -136,7 +136,7 @@ input:focus + .slider {
 </form>
 
 
-<%= form_tag('reset_queue_pdf', method: :post) %>
+<%= form_tag('/reset_queue_pdf', method: :post) %>
   <div class="container-fluid" style="padding: 10px;">
     <button type="submit" class="btn btn-secondary btn-lg btn-block">
       Reset QRcode

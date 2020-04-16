@@ -30,8 +30,7 @@
 
       <div class="row" style="padding-bottom: 0px;">
         <div class="col">
-          <%= form_tag('exit_queue', method: :post) %>
-          <form action="management_settings">
+          <%= form_tag('/exit_queue', method: :post) %>
             <%= hidden_field_tag('join_code', mjoin.merchant.join_code) %>
             <button type="submit" class="btn btn-danger btn-sm btn-block">
               Exit queue 
@@ -62,8 +61,7 @@
         <hr class="my-2">
         <div class="row" style="padding-bottom: 0px;">
           <div class="col">
-            <%= form_tag('join_queue', method: :post) %>
-            <form action="management_settings">
+            <%= form_tag('/join_queue', method: :post) %>
               <%= hidden_field_tag('join_code', mjoin.merchant.join_code) %>
               <button type="submit" class="btn btn-primary btn-sm btn-block">
                 Join queue
@@ -73,9 +71,8 @@
           </div>
           <div class="col">
 
-            <%= form_tag('remove_queue', method: :post) %>
+            <%= form_tag('/remove_queue', method: :post) %>
             <%= hidden_field_tag('join_code', mjoin.merchant.join_code) %>
-            <form action="management_settings">
               <button type="submit" class="btn btn-danger btn-sm btn-block">
                 Remove queue
               </button>

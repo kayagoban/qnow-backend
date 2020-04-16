@@ -3,6 +3,7 @@ class MerchantsController < ApplicationController
   require 'prawn/qrcode'
 
   before_action :create_user_login
+  self.per_form_csrf_tokens = true
 
   def admit
     @user.admit

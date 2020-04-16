@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
 
   include ActionController::MimeResponds
 
+  self.per_form_csrf_tokens = true
+
   def create_user_login
     begin
       @user = User.find(session['user_id'])

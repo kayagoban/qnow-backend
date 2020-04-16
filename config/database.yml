@@ -21,5 +21,10 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: qnow_production
+  pool: 5
+  username: rails 
+  password: 2520fb8c5c8c7efc356c906e09c2adeb
+  host: localhost

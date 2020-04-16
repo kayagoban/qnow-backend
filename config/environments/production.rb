@@ -4,6 +4,8 @@ Rails.application.configure do
   # Code is not reloaded between requests.
   config.cache_classes = true
 
+  config.hosts << 'qnow.app'
+  config.hosts << 'www.qnow.app'
   #config.cache_store = :redis_store, {
   #  expires_in: 1.hour,
   #  namespace: 'cache',
