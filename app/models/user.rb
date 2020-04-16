@@ -47,6 +47,7 @@ class User < ApplicationRecord
   # Merchant role methods
 
   def admit
+    return if owned_queue_slots.empty?
     owned_queue_slots.first.destroy
   end
 
