@@ -8,7 +8,13 @@ class UsersController < ApplicationController
   end
 
   def status
-    @merchant_joins = @user.known_merchant_joins.includes(:merchant)
+    if stale?(etag: @user, last_modified: @user.updated_at)
+      @merchant_joins = @user.known_merchant_joins.includes(:merchant)
+      respond_to do |format|
+        format.html # show.html.erb
+        #format.json { render json: @company }
+      end
+    end
   end
 
   def transfer_code

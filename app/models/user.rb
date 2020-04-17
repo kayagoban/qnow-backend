@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
 
   before_create :set_codes
+  after_touch :touch_clients
 
   # merchant role associations
   has_many :known_client_joins, class_name: 'KnownMerchantUser', foreign_key: :merchant_id, dependent: :destroy, inverse_of: :merchant
@@ -26,6 +27,10 @@ class User < ApplicationRecord
   # current merchants who we have a queueslot for
   has_many :merchants, through: :joined_queue_slots, source: :merchant
 
+
+  def touch_clients
+    clients.touch_all
+  end
 
   def set_codes
     self.transfer_code = SecureRandom.alphanumeric
