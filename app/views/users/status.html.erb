@@ -1,5 +1,6 @@
 <%= render partial: 'shared/head', locals: { title: 'Qnow - Settings' }  %>
 
+
 <body>
 
 <%= render 'shared/nav' =%>
@@ -86,4 +87,6 @@
 
   <% end %>
 
-  <%= render 'shared/footer' =%>
+  <%= render 'shared/footer' %>
+
+  <%= javascript_pack_tag "status.js" %>
