@@ -6,10 +6,23 @@ class QueueSlot < ApplicationRecord
   validates :client, uniqueness: { scope: :merchant }
   validates :merchant, null: false
 
+  # create kmu
   before_create :create_known_association
 
   after_create :update_queue_positions
+
+  # null out the position on the kmu
+  before_destroy :remove_queue_position
+
   after_destroy :update_queue_positions
+
+  def remove_queue_position
+    kmu = KnownMerchantUser.where(merchant: merchant, client: client).first
+    if not kmu.nil?
+      kmu.position = nil
+      kmu.save
+    end
+  end
 
   def update_queue_positions
     ActiveRecord::Base.connection.execute(update_positions_sql)

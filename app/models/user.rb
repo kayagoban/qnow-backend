@@ -18,13 +18,17 @@ class User < ApplicationRecord
 
 
   # client role associations
+  #
+  # Join table model that represents a known association between a client and a merchant
   has_many :known_merchant_joins, class_name: 'KnownMerchantUser', foreign_key: :client_id, dependent: :destroy, inverse_of: :client
 
+  # merchants that a user knows about
   has_many :known_merchants, through: :known_merchant_joins, source: :merchant
 
+  # join table association that represents a place in a queue for a merchant
   has_many :joined_queue_slots, class_name:  'QueueSlot', foreign_key: :client_id, dependent: :destroy, inverse_of: :client
 
-  # current merchants who we have a queueslot for
+  # merchants who we have a queueslot for
   has_many :merchants, through: :joined_queue_slots, source: :merchant
 
 

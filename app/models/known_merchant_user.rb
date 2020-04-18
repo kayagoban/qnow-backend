@@ -5,19 +5,4 @@ class KnownMerchantUser < ApplicationRecord
 
   validates :client, uniqueness: { scope: :merchant }
 
-  #attr_accessor :position
-
-
-  #def position
-  #  if merchant.queue_slots_count == 0
-  #    return 0 
-  #  end
-#
-#    begin
-#      QueueSlot.find_by(client_id: client_id, merchant_id: merchant_id).position
-#    rescue
-#      return 0 
-###    end
-#  end
-
 end

@@ -7,7 +7,7 @@
 
 <% @merchant_joins.each do |mjoin| %>
 
-  <% if mjoin.position != 0 %>
+  <% if not mjoin.position.nil? %>
 
     <div id="<%= mjoin.merchant.id %>" class="jumbotron" style="border-color: crimson; padding: 10px; margin-bottom: 10px">
       <span class="h2">
