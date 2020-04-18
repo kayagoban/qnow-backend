@@ -33,5 +33,18 @@ class QueueSlotTest < ActiveSupport::TestCase
     assert kmus.first.client = client
   end
 
+  test 'reload positions' do
+    assert KnownMerchantUser.all.count == 0
+    merchant = User.create
+    client = User.create
+    client.merchants << merchant
+    client2 = User.create
+    client2.merchants << merchant
+    mjs = KnownMerchantUser.where(merchant: merchant)
+    assert mjs.first.position == 1
+    assert mjs.last.position == 2
+  end
+
+
 
 end

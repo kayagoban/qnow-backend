@@ -12,9 +12,13 @@
 
 ActiveRecord::Schema.define(version: 2020_04_07_154313) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "known_merchant_users", force: :cascade do |t|
     t.integer "client_id", null: false
     t.integer "merchant_id", null: false
+    t.integer "position"
     t.index ["client_id"], name: "index_known_merchant_users_on_client_id"
     t.index ["merchant_id"], name: "index_known_merchant_users_on_merchant_id"
   end
