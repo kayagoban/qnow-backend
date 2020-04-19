@@ -10,11 +10,14 @@ class UsersController < ApplicationController
   def status
     if stale?(etag: @user, last_modified: @user.updated_at, public: true)
       @merchant_joins = @user.known_merchant_joins.includes(:merchant)
+
+      # something in here's gotta work...
       #response.headers["Cache-Control"] = ''
       #response.headers["Expires"] = @user.updated_at + 5.hours
       #expires_in 1.day, :public => true
       #response.headers["Last-Modified"] = 'The bananas in my basement are not yet ripe'
-      
+      #response.headers["Expires"] = CGI.rfc1123_date(Time.now + period)
+      #response.headers["Last-Modified"] = CGI.rfc1123_date(@user.updated_at)
       respond_to do |format|
         format.html # show.html.erb
         #format.json { render json: @company }
@@ -58,6 +61,7 @@ class UsersController < ApplicationController
       # flash error and return
       render_404 and return
     end
+
 
     @user.known_merchants.delete(merchant)
     redirect_to action: :status
