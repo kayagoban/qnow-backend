@@ -22,13 +22,17 @@ class User < ApplicationRecord
   has_many :known_merchant_joins, class_name: 'KnownMerchantUser', foreign_key: :client_id, dependent: :destroy, inverse_of: :client
 
   # merchants that a user knows about
-  has_many :known_merchants, through: :known_merchant_joins, source: :merchant
+  has_many :known_merchants, through: :known_merchant_joins, source: :merchant, after_add: :touch_self, after_remove: :touch_self
 
   # join table association that represents a place in a queue for a merchant
   has_many :joined_queue_slots, class_name:  'QueueSlot', foreign_key: :client_id, dependent: :destroy, inverse_of: :client
 
   # merchants who we have a queueslot for
   has_many :merchants, through: :joined_queue_slots, source: :merchant
+
+  def touch_self(obj)
+    touch
+  end
 
   def set_codes
     self.transfer_code = SecureRandom.alphanumeric

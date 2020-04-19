@@ -211,6 +211,31 @@ class UsersControllerTest < ActionController::TestCase
 
   end
 
+  test 'get remove_queue' do
+
+    ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
+
+    merchant = User.create(
+      name: 'Konzum super', 
+    )
+    client = User.create
+    client.known_merchants << merchant
+    updated_time = client.updated_at
+
+    @request.session[:user_id] = client.id
+
+    get 'remove_queue', params: { join_code: merchant.join_code }
+
+    #binding.pry
+    client.reload
+
+
+
+    assert @response.status == 302
+    assert_not client.known_merchants.include?(merchant)
+    assert client.updated_at > updated_time
+  end
+
   test 'get transfer_code' do
     client = User.create
     @request.session[:user_id] = client.id
