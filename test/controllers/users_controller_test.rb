@@ -85,7 +85,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'post dequeue' do
-    ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
+    #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
     merchant = User.create(
       name: 'Konzum super', 
     )
