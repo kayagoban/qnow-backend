@@ -11,9 +11,6 @@ Rails.application.routes.draw do
   get 'known_merchants', to:  'users#known_merchants'
   post 'transfer_code', to: 'users#transfer_code'
 
-  put 'enqueue', to: 'users#enqueue'
-  put 'dequeue', to: 'users#dequeue'
-
   post 'join_queue', to: 'users#join_queue'
   post 'exit_queue', to: 'users#exit_queue'
  

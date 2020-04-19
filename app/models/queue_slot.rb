@@ -1,6 +1,6 @@
 class QueueSlot < ApplicationRecord
 
-  belongs_to :merchant, foreign_key: 'merchant_id', class_name: 'User', inverse_of: :owned_queue_slots, counter_cache: true, touch: true
+  belongs_to :merchant, foreign_key: 'merchant_id', class_name: 'User', inverse_of: :owned_queue_slots, counter_cache: true
   belongs_to :client, foreign_key: 'client_id', class_name: 'User', inverse_of: :joined_queue_slots
 
   validates :client, uniqueness: { scope: :merchant }
@@ -9,12 +9,16 @@ class QueueSlot < ApplicationRecord
   # create kmu
   before_create :create_known_association
 
-  after_create :update_queue_positions
+  after_create :update_queue_positions, :touch_clients
 
   # null out the position on the kmu
-  before_destroy :remove_queue_position
+  before_destroy :remove_queue_position, :touch_clients
 
   after_destroy :update_queue_positions
+
+  def touch_clients
+    merchant.known_clients.touch_all
+  end
 
   def remove_queue_position
     kmu = KnownMerchantUser.where(merchant: merchant, client: client).first

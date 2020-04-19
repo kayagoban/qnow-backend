@@ -144,7 +144,7 @@ class UsersController < ApplicationController
   end
 
   def render_404
-    render(status: 404)
+    render(plain: '',status: 404)
   end
 
 end

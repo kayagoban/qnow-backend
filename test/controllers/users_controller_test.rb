@@ -38,7 +38,9 @@ class UsersControllerTest < ActionController::TestCase
   end
 
 
-  test 'post enqueue' do
+  test 'post join_queue' do
+    #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
+ 
     merchant = User.create(
       name: 'Konzum super', 
     )
@@ -50,38 +52,40 @@ class UsersControllerTest < ActionController::TestCase
     )
     prev_user = User.create
     prev_user.joined_queue_slots.create(merchant: merchant3)
+    prev_user_updated_at = prev_user.reload.updated_at
 
     client = User.create
+    client_updated_at = client.updated_at
     client.known_merchants << [merchant, merchant2]
     @request.session[:user_id] = client.id
 
-
-    post :enqueue, params: {  }
-    assert @response.status == 404
-
-    post :enqueue, params: { join_code: '34jl3kow' }
-    r = JSON.parse @response.body
+    post :join_queue, params: { join_code: '34jl3kow' }
     # incorrect join code
     assert @response.status == 404
 
-    post :enqueue, params: { join_code: merchant3.join_code }
-    r = JSON.parse @response.body
+    post :join_queue, params: { join_code: merchant3.join_code }
     # queue not enabled
     assert @response.status == 404
 
     merchant3.queue_enabled = true
     merchant3.save
 
-    post :enqueue, params: { join_code: merchant3.join_code }
-    r = JSON.parse @response.body
+    post :join_queue, params: { join_code: merchant3.join_code }
 
-    assert r['position'] == 2
-    assert r['id'] == merchant3.id 
+    client.reload
+    merchant3.reload
+    prev_user.reload
 
+    assert @response.status == 302 
+    assert client.merchants.include?(merchant3)
+    assert client.known_merchant_joins.find_by_merchant_id(merchant3.id).position == 2
+    assert client_updated_at < client.updated_at
+    assert prev_user_updated_at < prev_user.updated_at
 
   end
 
   test 'post dequeue' do
+    ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
     merchant = User.create(
       name: 'Konzum super', 
     )
