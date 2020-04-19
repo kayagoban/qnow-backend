@@ -21,6 +21,12 @@ class UsersController < ApplicationController
     render(json: { transfer_code: @user.transfer_code }.to_json) and return
   end
 
+  # This GET request mutates data on the 
+  # server.  This isn't RESTy, but it is 
+  # necessary to allow a QRcode URL to 
+  # perform an action - to add a known
+  # merchant to a user.
+  #
   def add_queue
     #begin
       merchant = User.find_by_join_code(params.require(:id))

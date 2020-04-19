@@ -5,4 +5,12 @@ class KnownMerchantUser < ApplicationRecord
 
   validates :client, uniqueness: { scope: :merchant }
 
+  after_create :touch_client
+  before_destroy :touch_client
+
+  def touch_client
+    client.touch
+    client.save
+  end
+
 end

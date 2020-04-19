@@ -185,18 +185,25 @@ class UsersControllerTest < ActionController::TestCase
 
   end
 
-  test 'post add_merchant' do
+  test 'get add_queue' do
 
+    #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
     merchant = User.create(
       name: 'Konzum super', 
     )
 
-    post 'add_merchant', params: { join_code: merchant.join_code }
+    client = User.create
+    updated_time = client.updated_at
 
-    r = JSON.parse @response.body
+    @request.session[:user_id] = client.id
 
-    assert @response.status == 200
-    assert r['name'] == merchant.name
+    get 'add_queue', params: { id: merchant.join_code }
+
+    client.reload
+
+    assert client.known_merchants.include?(merchant)
+    assert client.updated_at != updated_time
+    assert @response.status == 302
 
   end
 
