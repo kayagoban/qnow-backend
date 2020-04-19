@@ -8,8 +8,13 @@ class UsersController < ApplicationController
   end
 
   def status
-    if stale?(etag: @user, last_modified: @user.updated_at)
+    if stale?(etag: @user, last_modified: @user.updated_at, public: true)
       @merchant_joins = @user.known_merchant_joins.includes(:merchant)
+      #response.headers["Cache-Control"] = ''
+      #response.headers["Expires"] = @user.updated_at + 5.hours
+      #expires_in 1.day, :public => true
+      #response.headers["Last-Modified"] = 'The bananas in my basement are not yet ripe'
+      
       respond_to do |format|
         format.html # show.html.erb
         #format.json { render json: @company }

@@ -30,4 +30,5 @@ test:
   database: qnow_test
 
 production:
+  <<: *default
   database: qnow_production
