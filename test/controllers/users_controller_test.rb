@@ -3,43 +3,10 @@ require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
 
-  test 'get known_merchants' do # test_get_merchants
-    merchant = User.create(
-      name: 'Konzum super', 
-    )
-    merchant2 = User.create(
-      name: 'Ljekarna', 
-    )
-    merchant3 = User.create(
-      name: 'Lidl u centru grada', 
-    )
-    client = User.create
-
-    client.known_merchants << [merchant, merchant2, merchant3]
-
-    # unauthorized
-    #get :known_merchants
-    #assert @response.status == 401
-
-    @request.session[:user_id] = 414141 
-    # still unauthorized
-    #get :known_merchants
-    #assert @response.status == 401
-
-    @request.session[:user_id] = client.id
-
-    get :known_merchants
-
-    r = JSON.parse @response.body
-
-    assert r.count == 3
-    assert r.last['name'] == 'Lidl u centru grada'
-
-  end
-
+   # outrageously verbose DB messages
+   #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
 
   test 'post join_queue' do
-    #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
  
     merchant = User.create(
       name: 'Konzum super', 
@@ -84,8 +51,7 @@ class UsersControllerTest < ActionController::TestCase
 
   end
 
-  test 'post dequeue' do
-    #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
+  test 'post exit_queue' do
     merchant = User.create(
       name: 'Konzum super', 
     )
@@ -94,9 +60,10 @@ class UsersControllerTest < ActionController::TestCase
     )
     merchant3 = User.create(
       name: 'Lidl u centru grada', 
+      queue_enabled: true
     )
     prev_user = User.create
-    prev_user.joined_queue_slots.create(merchant: merchant3)
+    prev_user.merchants << merchant3
 
     client = User.create
 
@@ -104,42 +71,23 @@ class UsersControllerTest < ActionController::TestCase
 
     client.known_merchants << [merchant, merchant2]
 
-    client.joined_queue_slots.create(merchant: merchant3)
+    client.merchants << merchant3
 
-    delete :dequeue, params: { id: merchant3.id }
-    r = JSON.parse @response.body
-    # queue not enabled
-    assert @response.status == 404
+    assert merchant3.reload.clients.count == 2 
 
-    merchant3.queue_enabled = true
-    merchant3.save
+    post :exit_queue, params: { join_code: merchant3.join_code }
+    assert @response.status == 302
+    assert client.merchants.count == 0
+    assert merchant3.reload.clients.count == 1
 
-    delete :dequeue, params: { id: merchant3.id }
-    r = JSON.parse @response.body
-
+    get 'status'
     assert @response.status == 200
-    assert client.joined_queue_slots.count == 0
-    assert merchant3.owned_queue_slots.count == 1
 
-  end
+    @request.headers['If-Modified-Since'] = @response.headers['Last-Modified']
+    get 'status'
+    assert @response.status == 304
 
-  test 'post enable_queue' do
-    client = User.create
-    @request.session[:user_id] = client.id
-    post 'enable_queue'
-    assert client.reload.queue_enabled?
-  end
 
-  test 'post disable_queue' do
-    merchant = User.create
-    User.create.merchants << merchant
-    User.create.merchants << merchant
-    User.create.merchants << merchant
-    @request.session[:user_id] = merchant.id
-
-    post 'disable_queue'
-    assert_not merchant.reload.queue_enabled?
-    assert merchant.owned_queue_slots.count == 0
   end
 
   test 'post transfer' do
@@ -181,17 +129,18 @@ class UsersControllerTest < ActionController::TestCase
 
     get 'status'
 
-    r = JSON.parse @response.body
-
     assert @response.status == 200
-    assert r.count == 3
-    assert r.last['pos'] == 2
+
+    @request.headers['If-Modified-Since'] = @response.headers['Last-Modified']
+
+    get 'status'
+
+    assert @response.status == 304
 
   end
 
   test 'get add_queue' do
 
-    #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
     merchant = User.create(
       name: 'Konzum super', 
     )
@@ -209,11 +158,19 @@ class UsersControllerTest < ActionController::TestCase
     assert client.updated_at != updated_time
     assert @response.status == 302
 
+    get 'status'
+
+    assert @response.status == 200
+
+    @request.headers['If-Modified-Since'] = @response.headers['Last-Modified']
+
+    get 'status'
+
+    assert @response.status == 304
+
   end
 
   test 'get remove_queue' do
-
-    ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
 
     merchant = User.create(
       name: 'Konzum super', 
@@ -226,10 +183,7 @@ class UsersControllerTest < ActionController::TestCase
 
     get 'remove_queue', params: { join_code: merchant.join_code }
 
-    #binding.pry
     client.reload
-
-
 
     assert @response.status == 302
     assert_not client.known_merchants.include?(merchant)
@@ -241,11 +195,6 @@ class UsersControllerTest < ActionController::TestCase
     @request.session[:user_id] = client.id
 
     get 'transfer_code'
-
-    r = JSON.parse @response.body
-
-    assert client.transfer_code == r['transfer_code']
-
 
 
   end

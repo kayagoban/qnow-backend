@@ -36,22 +36,14 @@ class UsersController < ApplicationController
   # merchant to a user.
   #
   def add_queue
-    #begin
-      merchant = User.find_by_join_code(params.require(:id))
-      #if @user.known_merchant_joins.where(merchant_id: params.require(:id)).count > 0
-      #  redirect_to action: :status and return
-      #end
+    merchant = User.find_by_join_code(params.require(:id))
+    begin
       @mjoin = @user.known_merchant_joins.create(merchant: merchant)
-      #if @mjoin.invalid?
-      #  binding.pry
-      #  raise Error
-      #end
-    #rescue
-    #  render_404 and return
-    #end
+    rescue
+    end
 
+    @user.touch
     redirect_to action: :status
-
   end
 
   def remove_queue
